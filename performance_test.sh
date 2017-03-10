@@ -8,7 +8,7 @@ OPENCL_PLATFORM="0"
 OPENCL_DEVICE="0"
 DEVICE_NAME="GenericDevice"
 
-# Configuration files
+# Configuration files (no need to modify)
 PADDING="${SOURCE_ROOT}/confs/padding.inc"
 ZAPPED_CHANNELS="${SOURCE_ROOT}/confs/zapped_channels.inc"
 DEDISPERSION_STEPONE="${SOURCE_ROOT}/confs/dedispersion_stepone.inc"
@@ -17,7 +17,7 @@ INTEGRATION_STEPS="${SOURCE_ROOT}/confs/integration_steps.inc"
 INTEGRATION="${SOURCE_ROOT}/confs/integration.inc"
 SNR="${SOURCE_ROOT}/confs/snr.inc"
 
-# Test parameters
+# Test parameters (no need to modify)
 INPUT_BITS="8"
 SUBBANDS="32"
 SUBBANDING_DMS="128"
