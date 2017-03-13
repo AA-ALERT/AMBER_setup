@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source defs.sh
+source ${SOURCE_ROOT}/artshardware/defs.sh
 
 # Test
 mkdir -p ${SOURCE_ROOT}/results

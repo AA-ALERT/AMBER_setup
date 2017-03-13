@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source defs.sh
+source ${SOURCE_ROOT}/artshardware/defs.sh
 
 # Tune and generate configuration files
 mkdir -p ${SOURCE_ROOT}/confs

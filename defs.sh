@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Source root
-SOURCE_ROOT=${HOME}
-
 # Device settings
 OPENCL_PLATFORM="0"
 OPENCL_DEVICE="0"
