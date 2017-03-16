@@ -1,34 +1,35 @@
-export SOURCE_ROOT=$HOME/pipeline
-mkdir -p "${SOURCE_ROOT}"
+#!/bin/bash
+
+if [ -z "${SOURCE_ROOT}" ]; then
+  echo "Please set SOURCE_ROOT first"
+  exit
+fi
 
 # by default, use parallel make to speed things up
 MAKE="make -j4"
+export SOURCE_ROOT=$HOME/pipeline
+mkdir -p "${SOURCE_ROOT}"
 
-# Machine specific settings
-# DAS5
-module load hdf5_18
-export HDF5_INCLUDE="-I/cm/shared/apps/hdf5/current/include/"
-export HDF5_LDFLAGS="-L/cm/shared/apps/hdf5/current/lib/"
-export HDF5_LIBS="-lhdf5 -lhdf5_cpp -lz"
+# save directory path to this repo
+cd `dirname $0`
+ARTSHARDWARE=`pwd`
 
-# manually copy psrdada if available. Not necessary for hardware test
+# Not necessary for hardware test
 cd "${SOURCE_ROOT}"
-if [ -f ~/psrdada.tar.gz ]; then
+if false ; then
   echo "PSRDada"
-  tar -xvf ~/psrdada.tar.gz
+  tar -xvf "${ARTSHARDWARE}/optional/psrdada.tar.gz"
   cd psrdada
   $MAKE
   export PSRDADA="${SOURCE_ROOT}/psrdada"
+
+  echo "Ringbuffer"
+  cd "${SOURCE_ROOT}"
+  git clone -b sc4 https://github.com/AA-ALERT/ringbuffer.git
+  cd ringbuffer && $MAKE
 else
-  echo "Skipping PSRDada"
+  echo "Skipping PSRDada and fill ringbuffer"
 fi
-
-module load cuda80/toolkit
-
-# fillringbuffer code
-echo "Ringbuffer"
-cd "${SOURCE_ROOT}"
-git clone -b sc4 https://github.com/AA-ALERT/ringbuffer.git
 
 echo "Utils"
 cd "${SOURCE_ROOT}"

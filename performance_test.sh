@@ -1,6 +1,11 @@
 #!/bin/bash
 
-source ${SOURCE_ROOT}/artshardware/defs.sh
+if [ -z "${SOURCE_ROOT}" ]; then
+  echo "Please set SOURCE_ROOT first"
+  exit
+fi
+
+source defs.sh
 
 # Test
 mkdir -p ${SOURCE_ROOT}/results
