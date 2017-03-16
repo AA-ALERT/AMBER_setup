@@ -25,7 +25,7 @@ Then install the following packages with dependencies:
 ```
 sudo yum group install "Development Tools"
 sudo yum install git wget ed
-sudo yum install hdf5-devel`
+sudo yum install hdf5-devel
 ```
 
 ## Install OpenCL
