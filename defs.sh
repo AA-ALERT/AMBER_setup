@@ -1,23 +1,26 @@
 #!/bin/bash
 
-# Device settings
+# CPU core used to run the pipeline (important for affinity to OpenCL device)
+CPU="1"
+
+# OpenCL configuration
+## Device settings
 OPENCL_PLATFORM="0"
 OPENCL_DEVICE="0"
+## Name of OpenCL device (used for configuration files)
 DEVICE_NAME="GenericDevice"
-## Padding (in bytes)
+## Size of the cache line of OpenCL device (in bytes)
 DEVICE_PADDING="128"
+## Number of OpenCL work-items running simultaneously
 DEVICE_THREADS="32"
-CPU="1"
 
 # Tuning
 ITERATIONS="10"
-
-# Constraints
+## Constraints
 MIN_THREADS="8"
 MAX_THREADS="1024"
 MAX_ITEMS="255"
-
-# Dedispersion constraints
+## Dedispersion constraints
 LOCAL="-local"
 MAX_ITEMS_DIM0="64"
 MAX_ITEMS_DIM1="32"
@@ -25,7 +28,9 @@ MAX_UNROLL="32"
 MAX_DIM0="1024"
 MAX_DIM1="128"
 
-# Configuration files (no need to modify)
+# Do not modify below this line
+
+# Configuration files (do not modify)
 PADDING="${SOURCE_ROOT}/confs/padding.inc"
 ZAPPED_CHANNELS="${SOURCE_ROOT}/confs/zapped_channels.inc"
 DEDISPERSION_STEPONE="${SOURCE_ROOT}/confs/dedispersion_stepone.inc"
@@ -34,7 +39,7 @@ INTEGRATION_STEPS="${SOURCE_ROOT}/confs/integration_steps.inc"
 INTEGRATION="${SOURCE_ROOT}/confs/integration.inc"
 SNR="${SOURCE_ROOT}/confs/snr.inc"
 
-# Test parameters (no need to modify)
+# Test parameters (do not modify)
 INPUT_BITS="8"
 SUBBANDS="32"
 SUBBANDING_DMS="128"
