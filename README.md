@@ -46,7 +46,7 @@ For users having access to the DAS5 cluster, specific configuration can be set v
 
 # Autotuning
 
-Edit the definitions in the defs.sh file. TODO: what should be set?
+Check the definitions in the defs.sh file. Modify OpenCL device parameters and CPU identifier (the pipeline is pinned to the specified CPU to optimize memory transfers).
 Then run the tuning script:
 ```
 export SOURCE_ROOT=${HOME}/pipeline
