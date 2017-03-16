@@ -7,7 +7,7 @@ The test contains three steps:
 
 1. installation of the software
 2. running the auto-tuning (can last from 5 to 24 hours)
-3. measuring final performance
+3. measuring final performance (takes several minutes per run)
 
 Help or questions available via leeuwen@astron.nl
 
@@ -15,6 +15,7 @@ Help or questions available via leeuwen@astron.nl
 
 ## Install dependencies from repositories
 
+This installation guide has been written for `CentOS7`, starting from a clean install.
 Extra package are available via the epel repository; enable it via:
 ```
 sudo yum install epel-release
