@@ -61,15 +61,15 @@ Half precission is also acceptable, but will require some code modifications. Pl
 
 # Performance testing
 
-Finally, the perfromace test can be run using:
+Finally, the performance test can be run using:
 ```
 export SOURCE_ROOT=${HOME}/pipeline
 ./performance_test.sh
 ```
 
-It will report a number (roughly inverse running time excluding initialization), that should be multiplied by the number of GPUs in the system to obtain the performance score for this tender:
+It will report a number (roughly inverse running time excluding initialization), that should be multiplied by the number of GPUs in the full system to obtain the performance score for this tender:
 ```
 performance score = (number of GPUs) x (output of the performance test)
 ```
-
+Please do not round the performance score, and report it with full precision.
 It is allowed to run the test multiple times and report the average score.
