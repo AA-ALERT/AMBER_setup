@@ -34,15 +34,11 @@ Headers should be in standard paths, location of the libraries can be set via th
 
 ## Install full pipeline
 
-Set the evironment variable SOURCE_ROOT as the install location for the pipeline and run the installation script:
+Set the environment variable SOURCE_ROOT as the install location for the pipeline and run the installation script:
 ```
 export SOURCE_ROOT=${HOME}/pipeline
 ./install_full_pipeline.sh
 ```
-
-## Install full pipeline on the DAS cluster
-
-For users having access to the DAS5 cluster, specific configuration can be set via the das5_config.sh script
 
 # Autotuning
 
@@ -53,11 +49,11 @@ export SOURCE_ROOT=${HOME}/pipeline
 ./tune_modules.sh
 ```
 
-This script will run for a possibly long period (upto 24 hours).
-It will result in a number of configuration files that will be automatically stored at the apropriate locations.
+This script will run for a possibly long period (up to 24 hours).
+It will result in a number of configuration files that will be automatically stored at the appropriate locations.
 
-Note that by default the testsuite runs in single precission.
-Half precission is also acceptable, but will require some code modifications. Please contact us for details.
+Note that by default the test suite runs in single precision.
+Half precision is also acceptable, but will require some code modifications. Please contact us for details.
 
 # Performance testing
 
@@ -67,9 +63,9 @@ export SOURCE_ROOT=${HOME}/pipeline
 ./performance_test.sh
 ```
 
-It will report a number (roughly inverse running time excluding initialization), that should be multiplied by the number of GPUs in the full system to obtain the performance score for this tender:
+It will report a number (roughly inverse running time excluding initialization), that should be multiplied by the number of GPUs per server to obtain the performance score for this tender:
 ```
-performance score = (number of GPUs) x (output of the performance test)
+performance score = (number of GPUs per node) x (output of the performance test)
 ```
 Please do not round the performance score, and report it with full precision.
 It is allowed to run the test multiple times and report the average score.
