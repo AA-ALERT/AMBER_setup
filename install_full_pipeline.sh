@@ -6,8 +6,7 @@ if [ -z "${SOURCE_ROOT}" ]; then
 fi
 
 # by default, use parallel make to speed things up
-MAKE="make -j4"
-export SOURCE_ROOT=$HOME/pipeline
+MAKE="make -j"
 mkdir -p "${SOURCE_ROOT}"
 
 # save directory path to this repo
