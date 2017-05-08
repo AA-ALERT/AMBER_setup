@@ -11,6 +11,7 @@ MODULES="utils OpenCL AstroData Dedispersion Integration SNR TransientSearch"
 
 for module in ${MODULES}
 do
+  echo "Updating ${module}"
   cd ${SOURCE_ROOT}/${module}
   git pull
   $MAKE all
