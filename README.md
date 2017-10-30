@@ -1,71 +1,66 @@
-# Performance test suite for the ARTS hardware tender
+# AMBER Setup Scripts
 
-This test suite consists of an auto-tuning (ie. self-optimizing) OpenCL program used for astrophysics research (specifically, for the detection of 'Fast Radio Bursts').
-It is one of the programs that will be run on the final hardware.
+This repository contains a set of scripts to perform basic maintenance operation on an installation of [AMBER](https://github.com/AA-ALERT/AMBER), a many-core accelerated and fully auto-tuned FRB pipeline.
+The operations currently supported are:
 
-The test contains three steps:
+- Install the pipeline
+- Update the pipeline
 
-1. installation of the software
-2. running the auto-tuning (can last from 5 to 24 hours)
-3. measuring final performance (takes several minutes per run)
+# Users Guide
 
-Help or questions available via leeuwen@astron.nl
+## Prerequisites
 
-# Installation
-
-## Install dependencies from repositories
-
-This installation guide has been written for `CentOS7`, starting from a clean install.
-Extra package are available via the epel repository; enable it via:
+Before running this script it is necessary to set two environmental variables: `SOURCE_ROOT` and `INSTALL_ROOT`.
+`SOURCE_ROOT` specifies where the source code of AMBER all its dependencies are saved; `INSTALL_ROOT` specifies where the libraries, includes, and executables are saved.
 ```
-sudo yum install epel-release
+# Example
+export SOURCE_ROOT=${HOME}/src/AMBER/src
+export SOURCE_ROOT=${HOME}/src/AMBER/build
 ```
+If the directories do not exist, they will be created by the script.
 
-Then install the following packages with dependencies:
+In order to compile and run, AMBER needs a working [OpenCL](https://www.khronos.org/opencl/) setup; OpenCL is a necessary dependency for the pipeline.
+
+If the environmental variable `DEBUG` is set, generated executables and libraries will have compiler optimizations disabled, and contain all debug symbols.
+If the environmental variable `OPENMP` is set, [OpenMP](http://www.openmp.org/) is used to parallelize some of the CPU workload.
 ```
-sudo yum group install "Development Tools"
-sudo yum install git wget ed
-sudo yum install hdf5-devel
-```
-
-## Install OpenCL
-
-Headers should be in standard paths, location of the libraries can be set via the OPENCL_LIB variable
-
-## Install full pipeline
-
-Set the environment variable SOURCE_ROOT as the install location for the pipeline and run the installation script:
-```
-export SOURCE_ROOT=${HOME}/pipeline
-./install_full_pipeline.sh
+# Example
+export DEBUG=1
+export OPENMP=1
 ```
 
-# Autotuning
-
-Check the definitions in the defs.sh file. Modify OpenCL device parameters and CPU identifier (the pipeline is pinned to the specified CPU to optimize memory transfers).
-Then run the tuning script:
+There are also two optional dependencies: [PSRDADA](http://psrdada.sourceforge.net/) and [HDF5](https://support.hdfgroup.org/HDF5/).
+To enable support for PSRDADA it is necessary to compile the package, and set the environmental variable `PSRDADA` to the directory containing the source code and object files.
+PSRDADA support is necessary to read time series from a PSRDADA ringbuffer.
 ```
-export SOURCE_ROOT=${HOME}/pipeline
-./tune_modules.sh
+# Example
+export PSRDADA=${HOME}/src/PSRDADA
 ```
-
-This script will run for a possibly long period (up to 24 hours).
-It will result in a number of configuration files that will be automatically stored at the appropriate locations.
-
-Note that by default the test suite runs in single precision.
-Half precision is also acceptable, but will require some code modifications. Please contact us for details.
-
-# Performance testing
-
-Finally, the performance test can be run using:
+To enable support for HDF5 it is necessary to install the C++ HDF5 libraries, then declare the environmental variable `LOFAR`; if HDF5 is not globally enable, it is also possible to set the environmental variable `HDF5INCLUDE` to the directory containing the include files, and the variable `HDF5DIR` to the directory containing the shared libraries.
+HDF5 is used to support the file format used by LOFAR observations.
 ```
-export SOURCE_ROOT=${HOME}/pipeline
-./performance_test.sh
+# Example
+export LOFAR=1
+export HDF5INCLUDE=${HOME}/src/hdf5/include
+export HDF5DIR=${HOME}/src/hdf5/lib
 ```
 
-It will report a number (roughly inverse running time excluding initialization), that should be multiplied by the number of GPUs per server to obtain the performance score for this tender:
+## Install AMBER
+
+To compile and install AMBER, run the `amber.sh` script.
+The script takes two command line parameters; the first parameter is the mode, in this case `install`, and the second parameter is the development branch to use.
 ```
-performance score = (number of GPUs per node) x (output of the performance test)
+# Example
+# Compile and install the master branch of AMBER
+amber.sh install master
 ```
-Please do not round the performance score, and report it with full precision.
-It is allowed to run the test multiple times and report the average score.
+
+## Update AMBER
+
+To update and recompile an already existing AMBER installation, run the `amber.sh` script and specify `update` as first parameter on the command line.
+```
+# Example
+# Update and install the master branch of AMBER
+amber.sh update master
+```
+
