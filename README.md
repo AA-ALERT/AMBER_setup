@@ -64,3 +64,11 @@ To update and recompile an already existing AMBER installation, run the `amber.s
 amber.sh update master
 ```
 
+## Post Install
+
+After installing AMBER, it is useful to modify the `PATH` and `LD_LIBRARY_PATH` variables to reflect the installation paths.
+```
+# Example
+export LD_LIBRARY_PATH=${INSTALL_ROOT}/lib:${LD_LIBRARY_PATH}
+export PATH=${INSTALL_ROOT}/bin:${PATH}
+```
