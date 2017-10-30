@@ -21,7 +21,7 @@ DIR=`dirname ${DIR}`
 
 # Usage function
 usage () {
-  echo "Usage: ${0} <install | update>"
+  echo "Usage: ${0} <install | update> <branch>"
 }
 
 # Create directories
@@ -29,16 +29,19 @@ mkdir -p "${SOURCE_ROOT}"
 mkdir -p "${INSTALL_ROOT}"
 
 # Process command line
-if [ ${#} -lt 1 ]
+if [ ${#} -lt 2 ]
 then
   usage
   exit
+else
+  COMMAND=${1}
+  BRANCH=${2}
 fi
 
-if [ "${1}" = "install" ]
+if [ ${COMMAND} = "install" ]
 then
   source ${DIR}/install.sh
-elif [ "${1}" = "update" ]
+elif [ ${COMMAND} = "update" ]
 then
   source ${DIR}/update.sh
 else
