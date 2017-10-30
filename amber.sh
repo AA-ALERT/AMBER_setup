@@ -29,7 +29,7 @@ mkdir -p "${SOURCE_ROOT}"
 mkdir -p "${INSTALL_ROOT}"
 
 # Process command line
-if [ ${#} -lt 2 ]
+if [ ${#} -lt 1 ]
 then
   usage
   exit
