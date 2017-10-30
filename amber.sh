@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# By default, use parallel make to speed things up
-MAKE="make -j"
+MAKE="make"
 
 if [ -z "${SOURCE_ROOT}" ]
 then
