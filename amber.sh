@@ -32,6 +32,7 @@ mkdir -p "${INSTALL_ROOT}"
 if [ ${#} -lt 2 ]
 then
   usage
+  exit
 fi
 
 if [ "${1}" = "install" ]
