@@ -2,13 +2,18 @@
 
 source ${SCENARIO}
 
-mkdir -p ${CONFS}
+if [ -d ${CONFS} ]
+then
+  rm -I ${CONFS}/*
+else
+  mkdir -p ${CONFS}
+fi
 
 # Padding
 echo "${DEVICE_NAME} ${DEVICE_PADDING}" >> ${CONFS}/padding.conf
 
-# Zapped channels (empty)
-touch ${CONFS}/zapped_channels.conf
+# Zapped channels
+echo ${ZAPPED_CHANNELS} >> ${CONFS}/zapped_channels.conf
 
 # Dedispersion
 if [ !${SUBBANDING} ]

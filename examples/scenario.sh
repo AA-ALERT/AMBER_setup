@@ -69,3 +69,5 @@ BEAMS="12"
 SYNTHESIZED_BEAMS="12"
 ## Downsampling factors
 INTEGRATION_STEPS="5 10 50 100 250 500"
+## Zapped channels
+ZAPPED_CHANNELS=""
