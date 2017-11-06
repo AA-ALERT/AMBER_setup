@@ -67,5 +67,5 @@ DM_STEP="0.0375"
 BEAMS="12"
 ## Number of synthesized output beams
 SYNTHESIZED_BEAMS="12"
-# Downsampling factors
+## Downsampling factors
 INTEGRATION_STEPS="5 10 50 100 250 500"
