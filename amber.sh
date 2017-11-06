@@ -5,13 +5,13 @@ MAKE="make"
 if [ -z "${SOURCE_ROOT}" ]
 then
   echo "Please set SOURCE_ROOT first; SOURCE_ROOT is the directory where source code will be kept."
-  exit
+  exit 1
 fi
 
 if [ -z "${INSTALL_ROOT}" ]
 then
   echo "Please set INSTALL_ROOT first; INSTALL_ROOT is the directory where the software will be installed."
-  exit
+  exit 1
 fi
 
 # Save script directory
@@ -38,7 +38,7 @@ mkdir -p "${INSTALL_ROOT}"
 if [ ${#} -lt 1 -o ${#} -gt 3 ]
 then
   usage
-  exit
+  exit 1
 else
   COMMAND=${1}
   if [ ${COMMAND} = "install" ]
@@ -69,4 +69,4 @@ else
   fi
 fi
 
-exit
+exit 0
