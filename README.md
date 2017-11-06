@@ -5,6 +5,7 @@ The operations currently supported are:
 
 - Install the pipeline
 - Update the pipeline
+- Tune the pipeline modules and generate configuration files
 
 # Users Guide
 
@@ -48,20 +49,32 @@ export HDF5DIR=${HOME}/src/hdf5/lib
 ## Install AMBER
 
 To compile and install AMBER, run the `amber.sh` script.
-The script takes two command line parameters; the first parameter is the mode, in this case `install`, and the second parameter is the development branch to use.
+The script takes two command line parameters: the first parameter is the mode, in this case `install`, and the second parameter is the development branch to use.
+The second parameter is optional, and if not provided the master branch is used.
 ```
 # Example
 # Compile and install the master branch of AMBER
-amber.sh install master
+amber.sh install
 ```
 
 ## Update AMBER
 
 To update and recompile an already existing AMBER installation, run the `amber.sh` script and specify `update` as first parameter on the command line.
+The second parameter is optional, and if not provided the master branch is used.
 ```
 # Example
 # Update and install the master branch of AMBER
-amber.sh update master
+amber.sh update
+```
+## Tune AMBER
+
+AMBER is composed by various modules that need to be tuned, and has multiple configuration files that need to be generated.
+To tune the pipeline and generate the configuration file, run the `amber.sh` script.
+The script takes three command line parameters: the first parameter is the mode, in this case `tune`, the second parameter is the path of a file containing the description of the scenario in which AMBER will be run, and the third is the path where to save the configuration files.
+```
+# Example
+# Tune AMBER using the example scenario description
+amber.sh tune examples/scenario.sh ${INSTALL_PATH}/confs
 ```
 
 ## Post Install
