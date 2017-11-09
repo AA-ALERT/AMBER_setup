@@ -69,6 +69,9 @@ else
       exit 1
     fi
     source ${DIR}/tune.sh
+  elif [ ${COMMAND} = "compile" ]
+  then
+    source compile.sh
   else
     usage
     exit 1
