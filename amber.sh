@@ -63,9 +63,15 @@ else
   then
     SCENARIO=${2}
     CONFS=${3}
+    if [ -z ${SCENARIO} -o -z ${CONFS} ]
+    then
+      usage
+      exit 1
+    fi
     source ${DIR}/tune.sh
   else
     usage
+    exit 1
   fi
 fi
 
