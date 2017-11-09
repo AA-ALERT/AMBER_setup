@@ -5,6 +5,7 @@ The operations currently supported are:
 
 - Install the pipeline
 - Update the pipeline
+- Compile the pipeline
 - Tune the pipeline modules and generate configuration files
 
 # Users Guide
@@ -66,6 +67,17 @@ The second parameter is optional, and if not provided the master branch is used.
 # Update and install the master branch of AMBER
 amber.sh update
 ```
+
+## Compile AMBER
+
+Sometimes it may be necessary to recompile the pipeline, but without updating the source code from GitHub, for example to enable the `DEBUG` mode, or use different compiler optimizations.
+To recompile the pipeline, run the `amber.sh` script and specify `compile` as the only command line parameter.
+```
+# Example
+# Compile AMBER
+amber.sh compile
+```
+
 ## Tune AMBER
 
 AMBER is composed by various modules that need to be tuned, and has multiple configuration files that need to be generated.
