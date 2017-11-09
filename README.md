@@ -78,6 +78,15 @@ To recompile the pipeline, run the `amber.sh` script and specify `compile` as th
 amber.sh compile
 ```
 
+## Post Install
+
+After installing AMBER, it is useful to modify the `PATH` and `LD_LIBRARY_PATH` variables to reflect the installation paths.
+```
+# Example
+export LD_LIBRARY_PATH=${INSTALL_ROOT}/lib:${LD_LIBRARY_PATH}
+export PATH=${INSTALL_ROOT}/bin:${PATH}
+```
+
 ## Tune AMBER
 
 AMBER is composed by various modules that need to be tuned, and has multiple configuration files that need to be generated.
@@ -89,11 +98,3 @@ The script takes three command line parameters: the first parameter is the mode,
 amber.sh tune examples/scenario.sh ${INSTALL_PATH}/confs
 ```
 
-## Post Install
-
-After installing AMBER, it is useful to modify the `PATH` and `LD_LIBRARY_PATH` variables to reflect the installation paths.
-```
-# Example
-export LD_LIBRARY_PATH=${INSTALL_ROOT}/lib:${LD_LIBRARY_PATH}
-export PATH=${INSTALL_ROOT}/bin:${PATH}
-```
