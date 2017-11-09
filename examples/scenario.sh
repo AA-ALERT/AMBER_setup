@@ -3,8 +3,6 @@
 # Example tuning scenario
 
 # System
-## CPU core used to run the pipeline; important for affinity to OpenCL device
-CPU="1"
 ## OpenCL platform ID
 OPENCL_PLATFORM="0"
 ## OpenCL device ID
