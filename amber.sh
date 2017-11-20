@@ -18,6 +18,12 @@ fi
 DIR=`realpath ${0}`
 DIR=`dirname ${DIR}`
 
+# Import modules
+source ${DIR}/install.sh
+source ${DIR}/update.sh
+source ${DIR}/tune.sh
+source ${DIR}/compile.sh
+
 # Usage function
 usage () {
   echo "Usage: ${0} <install | update | tune> <branch | scenario> <configuration_path>"
@@ -49,7 +55,7 @@ else
     else
       BRANCH="master"
     fi
-    source ${DIR}/install.sh
+    install
   elif [ ${COMMAND} = "update" ]
   then
     if [ -n ${2} ]
@@ -58,7 +64,7 @@ else
     else
       BRANCH="master"
     fi
-    source ${DIR}/update.sh
+    update
   elif [ ${COMMAND} = "tune" ]
   then
     SCENARIO=${2}
@@ -68,10 +74,10 @@ else
       usage
       exit 1
     fi
-    source ${DIR}/tune.sh
+    tune
   elif [ ${COMMAND} = "compile" ]
   then
-    source compile.sh
+    compile
   else
     usage
     exit 1
