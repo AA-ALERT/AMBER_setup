@@ -6,7 +6,6 @@ update() {
   cd utils
   git checkout ${BRANCH}
   git pull
-  ${MAKE} install
   echo
 
   echo "Updating github.com/isazi/OpenCL"
@@ -14,7 +13,6 @@ update() {
   cd OpenCL
   git checkout ${BRANCH}
   git pull
-  ${MAKE} install
   echo
 
   echo "Updating github.com/AA-ALERT/AstroData"
@@ -22,7 +20,6 @@ update() {
   cd AstroData
   git checkout ${BRANCH}
   git pull
-  ${MAKE} install
   echo
 
   echo "Updating github.com/AA-ALERT/Dedispersion"
@@ -30,7 +27,6 @@ update() {
   cd Dedispersion
   git checkout ${BRANCH}
   git pull
-  ${MAKE} install
   echo
 
   echo "Updating github.com/AA-ALERT/Integration"
@@ -38,7 +34,6 @@ update() {
   cd Integration
   git checkout ${BRANCH}
   git pull
-  ${MAKE} install
   echo
 
   echo "Updating github.com/AA-ALERT/SNR"
@@ -46,7 +41,6 @@ update() {
   cd SNR
   git checkout ${BRANCH}
   git pull
-  ${MAKE} install
   echo
 
   echo "Updating github.com/AA-ALERT/AMBER"
@@ -54,6 +48,5 @@ update() {
   cd AMBER
   git checkout ${BRANCH}
   git pull
-  ${MAKE} install
   echo
 }
