@@ -5,7 +5,7 @@ tune() {
 
   if [ -d ${CONFS} ]
   then
-    rm -I ${CONFS}/* 2>/dev/null
+    rm -I ${CONFS}/*
   else
     mkdir -p ${CONFS}
   fi
