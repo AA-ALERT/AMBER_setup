@@ -26,11 +26,12 @@ source ${DIR}/compile.sh
 
 # Usage function
 usage () {
-  echo "Usage: ${0} <install | update | tune> <branch | scenario> <configuration_path>"
+  echo "Usage: ${0} <install | update | compile | tune> <branch | scenario> <configuration_path>"
   echo -e "\tinstall <branch>: install the specified branch of AMBER."
   echo -e "\t\tbranch: development branch to install. The default is master."
   echo -e "\tupdate <branch>: update an already existing installation of AMBER. The default branch is master."
   echo -e "\t\tbranch: development branch to update. The default is master."
+  echo -e "\tcompile: recompiles and install the current branch of AMBER."
   echo -e "\ttune scenario configuration_path: tune the AMBER modules and save the generated configuration files."
   echo -e "\t\tscenario: script containing tuning parameters and constraints."
   echo -e "\t\tconfiguration_path: directory where to save the generated configuration files."
