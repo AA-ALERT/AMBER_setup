@@ -70,7 +70,7 @@ amber.sh update
 
 ## Compile AMBER
 
-Sometimes it may be necessary to recompile the pipeline, but without updating the source code from GitHub, for example to enable the `DEBUG` mode, or use different compiler optimizations.
+Sometimes it may be necessary to recompile and install the pipeline, but without updating the source code from GitHub, for example to enable the `DEBUG` mode, or use different compiler optimizations.
 To recompile the pipeline, run the `amber.sh` script and specify `compile` as the only command line parameter.
 ```
 # Example
