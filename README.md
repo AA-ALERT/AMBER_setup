@@ -3,10 +3,10 @@
 This repository contains a set of scripts to perform basic maintenance operation on an installation of [AMBER](https://github.com/AA-ALERT/AMBER), a many-core accelerated and fully auto-tuned FRB pipeline.
 The operations currently supported are:
 
-- Install the pipeline
-- Update the pipeline
-- Compile the pipeline
-- Tune the pipeline modules and generate configuration files
+- **Download** and install the complete pipeline
+- **Update** the AMBER source code
+- **Compile** and install AMBER
+- **Tune** the pipeline modules and generate configuration files
 
 # Users Guide
 
@@ -47,7 +47,7 @@ export HDF5INCLUDE=${HOME}/src/hdf5/include
 export HDF5DIR=${HOME}/src/hdf5/lib
 ```
 
-## Install AMBER
+## Download and Install AMBER
 
 To compile and install AMBER, run the `amber.sh` script.
 The script takes two command line parameters: the first parameter is the mode, in this case `install`, and the second parameter is the development branch to use.
@@ -60,7 +60,7 @@ amber.sh install
 
 ## Update AMBER
 
-To update and recompile an already existing AMBER installation, run the `amber.sh` script and specify `update` as first parameter on the command line.
+To update the source code of an existing AMBER installation, run the `amber.sh` script and specify `update` as first parameter on the command line.
 The second parameter is optional, and if not provided the master branch is used.
 ```
 # Example
