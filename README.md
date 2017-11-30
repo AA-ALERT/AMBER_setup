@@ -98,4 +98,5 @@ The script takes three command line parameters: the first parameter is the mode,
 # Tune AMBER using the example scenario description
 amber.sh tune examples/scenario.sh ${INSTALL_PATH}/confs
 ```
+Please **be aware** that the script will delete previously generated configuration files in the same directory.
 
