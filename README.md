@@ -67,6 +67,7 @@ The second parameter is optional, and if not provided the master branch is used.
 # Update and install the master branch of AMBER
 amber.sh update
 ```
+Please **be aware** that all local changes to the code are lost when updating.
 
 ## Compile AMBER
 
