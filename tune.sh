@@ -5,7 +5,7 @@ tune() {
 
   if [ -d ${CONFS} ]
   then
-    for file in "padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf snr.conf integration_steps.conf integration.conf"
+    for file in padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf snr.conf integration_steps.conf integration.conf
     do
       if [ -f ${CONFS}/${file} ]
       then
