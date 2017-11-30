@@ -5,6 +5,10 @@ tune() {
 
   if [ -d ${CONFS} ]
   then
+    for file in `ls ${CONFS}`
+    do
+      rm ${CONFS}/file
+    done
     rm -I ${CONFS}/*
   else
     mkdir -p ${CONFS}
