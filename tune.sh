@@ -5,11 +5,13 @@ tune() {
 
   if [ -d ${CONFS} ]
   then
-    for file in `ls ${CONFS}`
+    for file in "padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf snr.conf integration_steps.conf integration.conf"
     do
-      rm ${CONFS}/file
+      if [ -f ${CONFS}/${file} ]
+      then
+        rm ${CONFS}/${file}
+      fi
     done
-    rm -I ${CONFS}/*
   else
     mkdir -p ${CONFS}
   fi
