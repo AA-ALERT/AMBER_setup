@@ -34,7 +34,7 @@ MAX_ITEMS_DIM0="64"
 ## Maximum number of variables in OpenCL dimension 1; dedispersion specific
 MAX_ITEMS_DIM1="32"
 ## Switch to use the subbanding mode; dedispersion specific
-SUBBANDING=true
+SUBBANDING=false
 
 # Scenario
 ## Number of channels
