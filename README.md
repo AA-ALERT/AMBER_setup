@@ -8,7 +8,7 @@ The operations currently supported are:
 - **Compile** and install AMBER
 - **Tune** the pipeline modules and generate configuration files
 
-# Users Guide
+# User's Guide
 
 ## Prerequisites
 
