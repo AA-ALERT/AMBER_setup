@@ -45,6 +45,8 @@ MIN_FREQ="1425.0"
 CHANNEL_BANDWIDTH="0.1953125"
 ## Number of samples per batch
 SAMPLES="25000"
+## Sampling time
+SAMPLING_TIME="4.096e-05"
 ## Number of subbands
 SUBBANDS="32"
 ## Number of DMs to dedisperse in step one; subbanding mode only
