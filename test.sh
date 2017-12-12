@@ -14,7 +14,7 @@ testing() {
     fi
     echo -n "Testing Dedispersion (step one): "
     ${INSTALL_ROOT}/bin/DedispersionTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -step_one -beams ${BEAMS} -samples ${SAMPLES} -sampling_time ${SAMPLING_TIME} -min_freq ${MIN_FREQ} -channels ${CHANNELS} -channel_bandwidth ${CHANNEL_BANDWIDTH} -zapped_channels ${CONFS}/zapped_channels.conf -subbands ${SUBBANDS} -subbanding_dms ${SUBBANDING_DMS} -subbanding_dm_first ${SUBBANDING_DM_FIRST} -subbanding_dm_step ${SUBBANDING_DM_STEP} -random ${LOCAL} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -threadsD1 "`echo ${CONF} | awk -F' ' '{print $7}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $9}'`" -itemsD1 "`echo ${CONF} | awk -F' ' '{print $10}'`" -unroll "`echo ${CONF} | awk -F' ' '{print $5}'`"
-    CONF="`cat ${CONFS}/dedispersion_stepone.conf`"
+    CONF="`cat ${CONFS}/dedispersion_steptwo.conf`"
     LOCAL=""
     if [ "`echo ${CONF} | awk -F' ' '{print $4}'`" = "1" ]
     then
