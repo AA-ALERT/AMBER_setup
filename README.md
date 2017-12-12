@@ -102,4 +102,4 @@ Please **be aware** that the script will delete previously generated configurati
 
 # Demo
 
-
+[![asciicast](https://asciinema.org/a/ORS45Opq7ZjsNsMmBsm5RjPDd.png)](https://asciinema.org/a/ORS45Opq7ZjsNsMmBsm5RjPDd)
