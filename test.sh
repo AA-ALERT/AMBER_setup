@@ -38,9 +38,9 @@ testing() {
   echo -n "Testing SNR for ${SAMPLES} samples: "
   if [ "${SUBBANDING}" = true ]
   then
-    ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F'' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F'' '{print $8}'`"
+    ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
   else
-    ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F'' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F'' '{print $8}'`"
+    ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
   fi
 
   # Integration steps
@@ -51,20 +51,20 @@ testing() {
       # Integration
       CONF="`cat ${CONFS}/integration.conf | grep " ${STEP} "`"
       echo -n "Testing Integration for step ${STEP}: "
-      ${INSTALL_ROOT}/bin/IntegrationTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F'' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F'' '{print $8}'`"
+      ${INSTALL_ROOT}/bin/IntegrationTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       # SNR after downsampling
       CONF="`cat ${CONFS}/snr.conf | grep " `echo "${SAMPLES} / ${STEP}" | bc -q` "`"
       echo -n "Testing SNR for `echo "${SAMPLES} / ${STEP}" | bc -q` samples: "
-      ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples `echo "${SAMPLES} / ${STEP}" | bc -q` -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F'' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F'' '{print $8}'`"
+      ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples `echo "${SAMPLES} / ${STEP}" | bc -q` -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
     else
       # Integration
       CONF="`cat ${CONFS}/integration.conf | grep " ${STEP} "`"
       echo -n "Testing Integration for step ${STEP}: "
-      ${INSTALL_ROOT}/bin/IntegrationTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F'' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F'' '{print $8}'`"
+      ${INSTALL_ROOT}/bin/IntegrationTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       # SNR after downsampling
       CONF="`cat ${CONFS}/snr.conf | grep " `echo "${SAMPLES} / ${STEP}" | bc -q` "`"
       echo -n "Testing SNR for `echo "${SAMPLES} / ${STEP}" | bc -q` samples: "
-      ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples `echo "${SAMPLES} / ${STEP}" | bc -q` -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F'' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F'' '{print $8}'`"
+      ${INSTALL_ROOT}/bin/SNRTest -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples `echo "${SAMPLES} / ${STEP}" | bc -q` -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
     fi
   done
 }
