@@ -2,12 +2,12 @@
 
 MAKE="make -j"
 
+# Check that the necessary environmental variables are set
 if [ -z "${SOURCE_ROOT}" ]
 then
   echo "Please set SOURCE_ROOT first; SOURCE_ROOT is the directory where source code will be kept."
   exit 1
 fi
-
 if [ -z "${INSTALL_ROOT}" ]
 then
   echo "Please set INSTALL_ROOT first; INSTALL_ROOT is the directory where the software will be installed."
