@@ -25,7 +25,7 @@ fi
 
 # Set AMBER include and library path
 CPLUS_INCLUDE_PATH="${INSTALL_ROOT}/include:${CPLUS_INCLUDE_PATH}"
-LIBRARY_PATH="${INSTALL_ROOT}/lib:${LIBRARY_PATH}"
+LIBRARY_PATH="${INSTALL_ROOT}/lib64:${LIBRARY_PATH}"
 
 # Save script directory
 DIR=`realpath ${0}`
