@@ -6,6 +6,9 @@ install() {
   git clone https://github.com/isazi/utils.git
   cd utils
   git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
@@ -14,6 +17,9 @@ install() {
   git clone https://github.com/isazi/OpenCL.git
   cd OpenCL
   git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
@@ -22,6 +28,9 @@ install() {
   git clone https://github.com/AA-ALERT/AstroData.git
   cd AstroData
   git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
@@ -30,6 +39,9 @@ install() {
   git clone https://github.com/AA-ALERT/Dedispersion.git
   cd Dedispersion
   git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
@@ -38,6 +50,9 @@ install() {
   git clone https://github.com/AA-ALERT/Integration.git
   cd Integration
   git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
@@ -46,6 +61,9 @@ install() {
   git clone https://github.com/AA-ALERT/SNR.git
   cd SNR
   git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
@@ -54,6 +72,9 @@ install() {
   git clone https://github.com/AA-ALERT/AMBER.git
   cd AMBER
   git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 }
