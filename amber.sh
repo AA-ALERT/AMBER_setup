@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAKE="make"
+MAKE="make -j"
 
 if [ -z "${SOURCE_ROOT}" ]
 then
