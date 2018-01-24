@@ -24,8 +24,10 @@ else
 fi
 
 # Set AMBER include and library path
-CPLUS_INCLUDE_PATH="${INSTALL_ROOT}/include:${CPLUS_INCLUDE_PATH}"
-LIBRARY_PATH="${INSTALL_ROOT}/lib64:${LIBRARY_PATH}"
+OLD_CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}
+export CPLUS_INCLUDE_PATH="${INSTALL_ROOT}/include:${CPLUS_INCLUDE_PATH}"
+OLD_LIBRARY_PATH=${LIBRARY_PATH}
+export LIBRARY_PATH="${INSTALL_ROOT}/lib64:${LIBRARY_PATH}"
 
 # Save script directory
 DIR=`realpath ${0}`
@@ -116,5 +118,9 @@ else
     exit 1
   fi
 fi
+
+# Restore variables that were exported outside the scope of this script
+export CPLUS_INCLUDE_PATH=${OLD_CPLUS_INCLUDE_PATH}
+export LIBRARY_PATH=${OLD_LIBRARY_PATH}
 
 exit 0
