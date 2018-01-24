@@ -14,6 +14,15 @@ then
   exit 1
 fi
 
+# Set CMake build arguments
+CMAKE_BUILD_ARGUMENTS="-DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT}"
+if [ -z ${DEBUG} ]
+then
+  CMAKE_BUILD_ARGUMENTS="${CMAKE_BUILD_ARGUMENTS} -DCMAKE_BUILD_TYPE=Release"
+else
+  CMAKE_BUILD_ARGUMENTS="${CMAKE_BUILD_ARGUMENTS} -DCMAKE_BUILD_TYPE=Debug"
+fi
+
 # Save script directory
 DIR=`realpath ${0}`
 DIR=`dirname ${DIR}`
