@@ -17,7 +17,7 @@ compile() {
 
   echo "Compiling github.com/AA-ALERT/AstroData"
   cd "${SOURCE_ROOT}"
-  cd AstroData
+  cd AstroData/build
   ${MAKE} clean
   ${MAKE} install
   echo
