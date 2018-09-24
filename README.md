@@ -20,7 +20,7 @@ Before running this script it is necessary to set two environmental variables: `
 ```bash
 # Example
 export SOURCE_ROOT=${HOME}/src/AMBER/src
-export SOURCE_ROOT=${HOME}/src/AMBER/build
+export BUILD_ROOT=${HOME}/src/AMBER/build
 ```
 If the directories do not exist, they will be created by the script.
 
