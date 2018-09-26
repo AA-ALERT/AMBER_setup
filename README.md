@@ -21,6 +21,7 @@ Before running this script it is necessary to set two environmental variables: `
 # Example
 export SOURCE_ROOT=${HOME}/src/AMBER/src
 export BUILD_ROOT=${HOME}/src/AMBER/build
+export INSTALL_ROOT=/path/to/install
 ```
 If the directories do not exist, they will be created by the script.
 
