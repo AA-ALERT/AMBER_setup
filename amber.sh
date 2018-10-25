@@ -16,7 +16,7 @@ fi
 
 # Set CMake build arguments
 CMAKE_BUILD_ARGUMENTS="-DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT}"
-if [ -z ${DEBUG} ]
+if [ -z "${DEBUG}" ]
 then
   CMAKE_BUILD_ARGUMENTS="${CMAKE_BUILD_ARGUMENTS} -DCMAKE_BUILD_TYPE=Release"
 else
