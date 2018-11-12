@@ -49,6 +49,8 @@ CHANNEL_BANDWIDTH="0.1953125"
 SAMPLES="25000"
 ## Sampling time
 SAMPLING_TIME="4.096e-05"
+## Downsampling factor
+DOWNSAMPLING=1
 ## Number of subbands
 SUBBANDS="32"
 ## Number of DMs to dedisperse in step one; subbanding mode only
@@ -67,7 +69,7 @@ DM_STEP="0.0375"
 BEAMS="12"
 ## Number of synthesized output beams
 SYNTHESIZED_BEAMS="12"
-## Downsampling factors
+## Downsampling factors for pulse width test
 INTEGRATION_STEPS="5 10 50 100 250 500"
 ## Zapped channels
 ZAPPED_CHANNELS=""
