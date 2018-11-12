@@ -49,7 +49,7 @@ tune() {
       SHIFT="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPING_TIME})" | bc -q`"
       DISPERSED_SAMPLES="`echo "${SAMPLES} + (${SHIFT} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP})))" | bc -q`"
     fi  
-    {INSTALL_ROOT}/bin/IntegrationTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -in_place -before_dedispersion -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -best 2>/dev/null 1>> ${CONFS}/downsampling.conf
+    ${INSTALL_ROOT}/bin/IntegrationTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -in_place -before_dedispersion -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -best 2>/dev/null 1>> ${CONFS}/downsampling.conf
     SAMPLES="`echo "${SAMPLES} / ${DOWNSAMPLING}" | bc -q`"
   fi
 
