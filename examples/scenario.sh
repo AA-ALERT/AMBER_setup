@@ -48,7 +48,7 @@ CHANNEL_BANDWIDTH="0.1953125"
 ## Number of samples per batch
 SAMPLES="25000"
 ## Sampling time
-SAMPLING_TIME="4.096e-05"
+SAMPLING_TIME="0.00004096"
 ## Downsampling factor
 DOWNSAMPLING=1
 ## Number of subbands
