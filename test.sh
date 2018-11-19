@@ -21,7 +21,7 @@ testing() {
       DISPERSED_SAMPLES="`echo "${SAMPLES} + (${SHIFT} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP})))" | bc -q`"
       DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
     fi
-    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}) (${DISPERSED_SAMPLES} + (${DISPERSE_SAMPLES} % ${DOWNSAMPLING})) else (${DISPERSED_SAMPLES})" | bc -q`"
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}) (${DISPERSED_SAMPLES} + (${DISPERSED_SAMPLES} % ${DOWNSAMPLING})) else (${DISPERSED_SAMPLES})" | bc -q`"
     CONF="`cat ${CONFS}/downsampling.conf | grep ${DEVICE_NAME} | grep " ${DISPERSED_SAMPLES} "`"
     echo -n "Testing Downsampling: "
     ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} | awk -F' ' '{print $9}'`"
