@@ -98,7 +98,7 @@ The script takes three command line parameters: the first parameter is the mode,
 ```bash
 # Example
 # Tune AMBER using the example scenario description
-amber.sh tune examples/scenario.sh ${INSTALL_PATH}/confs
+amber.sh tune examples/scenario.sh ${INSTALL_ROOT}/confs
 ```
 Please **be aware** that the script will delete previously generated configuration files in the same directory.
 
@@ -110,7 +110,7 @@ The script takes three command line parameters: the first parameter is the mode,
 ```bash
 # Example
 # Test the previously tuned AMBER configuration files
-amber.sh test examples/scenario.sh ${INSTALL_PATH}/confs
+amber.sh test examples/scenario.sh ${INSTALL_ROOT}/confs
 ```
 
 # Demo
