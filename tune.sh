@@ -55,7 +55,12 @@ tune() {
     fi
     DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}) (${DISPERSED_SAMPLES} + (${DOWNSAMPLING} - (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}))) else (${DISPERSED_SAMPLES})" | bc -q`"
     echo -n "${DEVICE_NAME} " >> ${CONFS}/downsampling.conf
-    ${INSTALL_ROOT}/bin/IntegrationTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -in_place -before_dedispersion -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -best 2>/dev/null 1>> ${CONFS}/downsampling.conf
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/IntegrationTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -in_place -before_dedispersion -subband -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -best 2>/dev/null 1>> ${CONFS}/downsampling.conf
+    else
+      ${INSTALL_ROOT}/bin/IntegrationTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -in_place -before_dedispersion -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -best 2>/dev/null 1>> ${CONFS}/downsampling.conf
+    fi
     SAMPLES="`echo "${SAMPLES} / ${DOWNSAMPLING}" | bc -q`"
   fi
 
