@@ -82,16 +82,49 @@ tune() {
   fi
 
   # SNR before downsampling
-  if [ "${MOMAD}" = true ]
+  if [ "${SNR}" = "SNR" ]
   then
+    # Standard SNR
+    echo "Tuning SNR for ${SAMPLES} samples"
+    echo -n "${DEVICE_NAME} " >> ${CONFS}/snr.conf
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+    else
+      ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+    fi
+  if [ "${SNR}" = "MOMAD" ]
+  then
+    # MOMAD specific
     echo "Tuning MAX for ${SAMPLES} samples"
     echo -n "${DEVICE_NAME} " >> ${CONFS}/max.conf
     if [ "${SUBBANDING}" = true ]
     then
       ${INSTALL_ROOT}/bin/SNRTuning -max -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max.conf
     else
-      ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max.conf
+      ${INSTALL_ROOT}/bin/SNRTuning -max -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max.conf
     fi
+    echo "Tuning MOMAD for ${SAMPLES} samples"
+    echo -n "${DEVICE_NAME} " >> ${CONFS}/momad.conf
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
+    else
+      ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
+    fi
+  elif [ "${SNR}" = "MOMSIGMACUT" ]
+  then
+    # MOMSIGMACUT specific
+    echo "Tuning MaxStdSigmaCut for ${SAMPLES} samples"
+    echo -n "${DEVICE_NAME} " >> ${CONFS}/max_std.conf
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/SNRTuning -max_std -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max_std.conf
+    else
+      ${INSTALL_ROOT}/bin/SNRTuning -max_std -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max_std.conf
+    fi
+  else
+    # MOMAD and MOMSIGMACUT
     echo "Tuning MedianOfMedians (step one) for ${SAMPLES} samples"
     echo -n "${DEVICE_NAME} " >> ${CONFS}/mom_stepone.conf
     if [ "${SUBBANDING}" = true ]
@@ -108,23 +141,6 @@ tune() {
       ${INSTALL_ROOT}/bin/SNRTuning -median -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${MOM_STEPTWO_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MOM_STEPTWO_SAMPLES} -best 2>/dev/null 1>> ${CONFS}/mom_steptwo.conf
     else
       ${INSTALL_ROOT}/bin/SNRTuning -median -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${MOM_STEPTWO_SAMPLES} -dms ${DMS} -median_step ${MOM_STEPTWO_SAMPLES} -best 2>/dev/null 1>> ${CONFS}/mom_steptwo.conf
-    fi
-    echo "Tuning MOMAD for ${SAMPLES} samples"
-    echo -n "${DEVICE_NAME} " >> ${CONFS}/momad.conf
-    if [ "${SUBBANDING}" = true ]
-    then
-      ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
-    else
-      ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
-    fi
-  else
-    echo "Tuning SNR for ${SAMPLES} samples"
-    echo -n "${DEVICE_NAME} " >> ${CONFS}/snr.conf
-    if [ "${SUBBANDING}" = true ]
-    then
-      ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
-    else
-      ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
     fi
   fi
 
@@ -147,8 +163,20 @@ tune() {
       ${INSTALL_ROOT}/bin/IntegrationTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/integration.conf
     fi
     # SNR after downsampling
-    if [ "${MOMAD}" = true ]
+    if [ "${SNR}" = "SNR" ] 
     then
+      # Standard SNR
+      echo "Tuning SNR for ${STEP_SAMPLES} samples"
+      echo -n "${DEVICE_NAME} " >> ${CONFS}/snr.conf
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+      else
+        ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+      fi
+    elif [ "${SNR}" = "MOMAD" ]
+    then
+      # MOMAD specific
       echo "Tuning MAX for ${STEP_SAMPLES} samples"
       echo -n "${DEVICE_NAME} " >> ${CONFS}/max.conf
       if [ "${SUBBANDING}" = true ]
@@ -157,6 +185,27 @@ tune() {
       else
         ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max.conf
       fi
+      echo "Tuning MOMAD for ${STEP_SAMPLES} samples"
+      echo -n "${DEVICE_NAME} " >> ${CONFS}/momad.conf
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
+      else
+        ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
+      fi
+    elif [ "${SNR}" = "MOMSIGMACUT" ]
+    then
+      # MOMSIGMACUT specific
+      echo "Tuning MaxStdSigmaCut for ${STEP_SAMPLES} samples"
+      echo -n "${DEVICE_NAME} " >> ${CONFS}/max_std.conf
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/SNRTuning -max_std -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max_std.conf
+      else
+        ${INSTALL_ROOT}/bin/SNRTuning -max_std -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max_std.conf
+      fi
+    else
+      # MOMAD and MOMSIGMACUT
       echo "Tuning MedianOfMedians (step one) for ${STEP_SAMPLES} samples"
       echo -n "${DEVICE_NAME} " >> ${CONFS}/mom_stepone.conf
       if [ "${SUBBANDING}" = true ]
@@ -172,23 +221,6 @@ tune() {
         ${INSTALL_ROOT}/bin/SNRTuning -median -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${MOM_STEPTWO_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MOM_STEPTWO_SAMPLES} -best 2>/dev/null 1>> ${CONFS}/mom_steptwo.conf
       else
         ${INSTALL_ROOT}/bin/SNRTuning -median -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${MOM_STEPTWO_SAMPLES} -dms ${DMS} -median_step ${MOM_STEPTWO_SAMPLES} -best 2>/dev/null 1>> ${CONFS}/mom_steptwo.conf
-      fi
-      echo "Tuning MOMAD for ${STEP_SAMPLES} samples"
-      echo -n "${DEVICE_NAME} " >> ${CONFS}/momad.conf
-      if [ "${SUBBANDING}" = true ]
-      then
-        ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
-      else
-        ${INSTALL_ROOT}/bin/SNRTuning -momad -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -median_step ${MEDIAN_STEP} -best 2>/dev/null 1>> ${CONFS}/momad.conf
-      fi
-    else
-      echo "Tuning SNR for ${STEP_SAMPLES} samples"
-      echo -n "${DEVICE_NAME} " >> ${CONFS}/snr.conf
-      if [ "${SUBBANDING}" = true ]
-      then
-        ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
-      else
-        ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
       fi
     fi
   done

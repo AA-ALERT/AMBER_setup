@@ -35,8 +35,8 @@ MAX_ITEMS_DIM0="64"
 MAX_ITEMS_DIM1="32"
 ## Switch to use the subbanding mode; dedispersion specific
 SUBBANDING=true
-## Switch to enable MOMAD mode for signal to noise; SNR specific
-MOMAD=true
+## SNR Mode ["SNR", "MOMAD", "MOMSIGMACUT"]
+SNR="SNR"
 
 # Scenario
 ## Number of channels

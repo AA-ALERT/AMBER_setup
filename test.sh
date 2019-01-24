@@ -64,8 +64,20 @@ testing() {
   fi
 
   # SNR before downsampling
-  if [ "${MOMAD}" = true ]
+  if [ "${SNR}" = "SNR" ]
   then
+    # Standard SNR
+    CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
+    echo -n "Testing SNR for ${SAMPLES} samples: "
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    else
+      ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    fi
+  elif [ "${SNR}" = "MOMAD" ]
+  then
+    # MOMAD specific
     CONF="`cat ${CONFS}/max.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
     echo -n "Testing MAX for ${SAMPLES} samples: "
     if [ "${SUBBANDING}" = true ]
@@ -74,6 +86,27 @@ testing() {
     else
       ${INSTALL_ROOT}/bin/SNRTesting -max -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
     fi
+    CONF="`cat ${CONFS}/momad.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
+    echo -n "Testing MOMAD for ${SAMPLES} samples: "
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    else
+      ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    fi
+  elif [ "${SNR}" = "MOMSIGMACUT" ]
+  then
+    # MOMSIGMACUT specific
+    CONF="`cat ${CONFS}/max_std.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
+    echo -n "Testing MaxStdSigmaCut for ${SAMPLES} samples: "
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/SNRTesting -max_std -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    else
+      ${INSTALL_ROOT}/bin/SNRTesting -max_std -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    fi
+  else
+    # MOMAD and MOMSIGMACUT
     CONF="`cat ${CONFS}/mom_stepone.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
     echo -n "Testing MedianOfMedians (step one) for ${SAMPLES} samples: "
     if [ "${SUBBANDING}" = true ]
@@ -91,43 +124,40 @@ testing() {
     else
       ${INSTALL_ROOT}/bin/SNRTesting -median -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${MOM_STEPTWO_SAMPLES} -dms ${DMS} -median_step ${MOM_STEPTWO_SAMPLES} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
     fi
-    CONF="`cat ${CONFS}/momad.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
-    echo -n "Testing MOMAD for ${SAMPLES} samples: "
-    if [ "${SUBBANDING}" = true ]
-    then
-      ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-    else
-      ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-    fi
-  else
-    CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
-    echo -n "Testing SNR for ${SAMPLES} samples: "
-    if [ "${SUBBANDING}" = true ]
-    then
-      ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-    else
-      ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-    fi
   fi
 
   # Integration steps
   for STEP in ${INTEGRATION_STEPS}
   do
+    # Integration
     STEP_SAMPLES="`echo "${SAMPLES} / ${STEP}" | bc -q`"
     if [ "${SUBBANDING}" = true ]
     then
-      # Integration
       CONF="`cat ${CONFS}/integration.conf | grep ${DEVICE_NAME} | grep " ${STEP} "`"
       echo -n "Testing Integration for step ${STEP}: "
       ${INSTALL_ROOT}/bin/IntegrationTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} | awk -F' ' '{print $9}'`"
     else
-      # Integration
       CONF="`cat ${CONFS}/integration.conf | grep ${DEVICE_NAME} | grep " ${STEP} "`"
       echo -n "Testing Integration for step ${STEP}: "
       ${INSTALL_ROOT}/bin/IntegrationTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} | awk -F' ' '{print $9}'`"
     fi
-    if [ "${MOMAD}" = true ]
+    # SNR after downsampling
+    if [ "${SNR}" = "SNR" ]
     then
+      # Standard SNR
+      if [ "${SUBBANDING}" = true ]
+      then
+        CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
+        echo -n "Testing SNR for ${STEP_SAMPLES} samples: "
+        ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      else
+        CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
+        echo -n "Testing SNR for `echo "${SAMPLES} / ${STEP}" | bc -q` samples: "
+        ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      fi
+    elif [ "${SNR}" = "MOMAD" ]
+    then
+      # MOMAD specific
       CONF="`cat ${CONFS}/max.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
       echo -n "Testing MAX for ${STEP_SAMPLES} samples: "
       if [ "${SUBBANDING}" = true ]
@@ -136,6 +166,27 @@ testing() {
       else
         ${INSTALL_ROOT}/bin/SNRTesting -max -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       fi
+      CONF="`cat ${CONFS}/momad.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
+      echo -n "Testing MOMAD for ${STEP_SAMPLES} samples: "
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      else
+        ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLESs} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      fi
+    elif [ "${SNR}" = "MOMSIGMACUT" ]
+    then
+      # MOMSIGMACUT specific
+      CONF="`cat ${CONFS}/max_std.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
+      echo -n "Testing MaxStdSigmaCut for ${STEP_SAMPLES} samples: "
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/SNRTesting -max_std -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      else
+        ${INSTALL_ROOT}/bin/SNRTesting -max_std -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      fi
+    else
+      # MOMAD and MOMSIGMACUT
       CONF="`cat ${CONFS}/mom_stepone.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
       echo -n "Testing MedianOfMedians (step one) for ${STEP_SAMPLES} samples: "
       if [ "${SUBBANDING}" = true ]
@@ -152,27 +203,6 @@ testing() {
         ${INSTALL_ROOT}/bin/SNRTesting -median -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${MOM_STEPTWO_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MOM_STEPTWO_SAMPLES} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       else
         ${INSTALL_ROOT}/bin/SNRTesting -median -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${MOM_STEPTWO_SAMPLES} -dms ${DMS} -median_step ${MOM_STEPTWO_SAMPLES} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-      fi
-      CONF="`cat ${CONFS}/momad.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
-      echo -n "Testing MOMAD for ${STEP_SAMPLES} samples: "
-      if [ "${SUBBANDING}" = true ]
-      then
-        ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-      else
-        ${INSTALL_ROOT}/bin/SNRTesting -momad -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLESs} -dms ${DMS} -median_step ${MEDIAN_STEP} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-      fi
-    else
-      if [ "${SUBBANDING}" = true ]
-      then
-        # SNR after downsampling
-        CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
-        echo -n "Testing SNR for ${STEP_SAMPLES} samples: "
-        ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
-      else
-        # SNR after downsampling
-        CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
-        echo -n "Testing SNR for `echo "${SAMPLES} / ${STEP}" | bc -q` samples: "
-        ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       fi
     fi
   done
