@@ -123,7 +123,8 @@ tune() {
     else
       ${INSTALL_ROOT}/bin/SNRTuning -max_std -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max_std.conf
     fi
-  else
+  elif [ "${SNR}" = "MOMAD" -o "${SNR}" = "MOMSIGMACUT" ]
+  then
     # MOMAD and MOMSIGMACUT
     echo "Tuning MedianOfMedians (step one) for ${SAMPLES} samples"
     echo -n "${DEVICE_NAME} " >> ${CONFS}/mom_stepone.conf
@@ -204,7 +205,8 @@ tune() {
       else
         ${INSTALL_ROOT}/bin/SNRTuning -max_std -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/max_std.conf
       fi
-    else
+    elif [ "${SNR}" = "MOMAD" -o "${SNR}" = "MOMSIGMACUT" ]
+    then
       # MOMAD and MOMSIGMACUT
       echo "Tuning MedianOfMedians (step one) for ${STEP_SAMPLES} samples"
       echo -n "${DEVICE_NAME} " >> ${CONFS}/mom_stepone.conf
