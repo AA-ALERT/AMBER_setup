@@ -105,7 +105,7 @@ testing() {
     else
       ${INSTALL_ROOT}/bin/SNRTesting -max_std -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
     fi
-  elif [ "${SNR}" = "MOMAD" -o "${SNR}" = "MOMSIGMACUT" ]
+  if [ "${SNR}" = "MOMAD" -o "${SNR}" = "MOMSIGMACUT" ]
   then
     # MOMAD and MOMSIGMACUT
     CONF="`cat ${CONFS}/mom_stepone.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
@@ -186,7 +186,7 @@ testing() {
       else
         ${INSTALL_ROOT}/bin/SNRTesting -max_std -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       fi
-    elif [ "${SNR}" = "MOMAD" -o "${SNR}" = "MOMSIGMACUT" ]
+    if [ "${SNR}" = "MOMAD" -o "${SNR}" = "MOMSIGMACUT" ]
     then
       # MOMAD and MOMSIGMACUT
       CONF="`cat ${CONFS}/mom_stepone.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
