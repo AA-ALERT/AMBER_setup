@@ -33,12 +33,12 @@ MAX_DIM1="128"
 MAX_ITEMS_DIM0="64"
 ## Maximum number of variables in OpenCL dimension 1; dedispersion specific
 MAX_ITEMS_DIM1="32"
-## Switch to use the subbanding mode; dedispersion specific
-SUBBANDING=true
-## SNR Mode ["SNR", "MOMAD", "MOMSIGMACUT"]
-SNR="SNR"
 
 # Scenario
+## Switch to select the subbanding mode; dedispersion specific
+SUBBANDING=true
+## Switch to select the SNR Mode ["SNR", "MOMAD", "MOMSIGMACUT"]
+SNR="SNR"
 ## Number of channels
 CHANNELS="1536"
 ## Frequency of the lowest channel, in MHz
@@ -73,5 +73,7 @@ SYNTHESIZED_BEAMS="12"
 INTEGRATION_STEPS="5 10 50 100 250 500"
 ## Zapped channels
 ZAPPED_CHANNELS=""
-## Median of medians step; only for MOMAD mode
+## Median of medians step size; only for MOMAD and MOMSIGMACUT mode
 MEDIAN_STEP=5
+## Sigma cut value for MOMSIGMACUT mode; this value is currently harcoded in AMBER
+NSIGMA=3
