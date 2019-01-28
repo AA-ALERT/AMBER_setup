@@ -5,11 +5,15 @@ tune() {
 
   if [ -d ${CONFS} ]
   then
-    if [ "${MOMAD}" = true ]
+    if [ "${SNR}" = "SNR" ]
+    then
+      FILES="padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf integration_steps.conf integration.conf snr.conf"
+    elif [ "${SNR}" = "MOMAD" ]
     then
       FILES="padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf integration_steps.conf integration.conf max.conf mom_stepone.conf mom_steptwo.conf momad.conf"
-    else
-      FILES="padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf integration_steps.conf integration.conf snr.conf"
+    elif [ "${SNR}" = "MOMSIGMACUT" ]
+    then
+      FILES="padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf integration_steps.conf integration.conf max_std.conf mom_stepone.conf mom_steptwo.conf"
     fi
     if [ ${DOWNSAMPLING} -gt 1 ]
     then
