@@ -49,6 +49,14 @@ update() {
   git pull
   echo
 
+  echo "Updating github.com/AA-ALERT/RFIm"
+  cd "${SOURCE_ROOT}"
+  cd RFIm
+  git stash
+  git checkout ${BRANCH}
+  git pull
+  echo
+
   echo "Updating github.com/AA-ALERT/AMBER"
   cd "${SOURCE_ROOT}"
   cd AMBER

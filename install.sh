@@ -61,6 +61,16 @@ install() {
   ${MAKE} install
   echo
 
+  echo "Installing github.com/AA-ALERT/RFIm"
+  cd "${SOURCE_ROOT}"
+  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/RFIm.git
+  cd RFIm
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
+  ${MAKE} install
+  echo
+
   echo "Installing github.com/AA-ALERT/AMBER"
   cd "${SOURCE_ROOT}"
   git clone -b ${BRANCH} -q https://github.com/AA-ALERT/AMBER.git

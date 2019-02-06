@@ -43,6 +43,13 @@ compile() {
   ${MAKE} install
   echo
 
+  echo "Compiling github.com/AA-ALERT/RFIm"
+  cd "${SOURCE_ROOT}"
+  cd RFIm/build
+  ${MAKE} clean
+  ${MAKE} install
+  echo
+
   echo "Compiling github.com/AA-ALERT/AMBER"
   cd "${SOURCE_ROOT}"
   cd AMBER/build
