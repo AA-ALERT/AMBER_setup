@@ -41,6 +41,27 @@ tune() {
     mkdir -p ${CONFS}
   fi
 
+  # Compute the number of dispersed samples
+  if [ "${SUBBANDING}" = true ]
+  then
+    # Subbanding mode
+    SHIFT_ONE="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
+    SHIFT_TWO="`echo "(4148.808 * ((1.0 / ((${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})))) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
+    DISPERSED_SAMPLES="`echo "(${SAMPLES} + (${SHIFT_TWO} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP}))))" | bc -q`"
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
+    DISPERSED_SAMPLES="`echo "${DISPERSED_SAMPLES} + (${SHIFT_ONE} * (${SUBBANDING_DM_FIRST} + ((${SUBBANDING_DMS} - 1) * ${SUBBANDING_DM_STEP})))" | bc -q`"
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
+  else
+    # Standard mode
+    SHIFT="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPING_TIME})" | bc -ql`"
+    DISPERSED_SAMPLES="`echo "${SAMPLES} + (${SHIFT} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP})))" | bc -q`"
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
+  fi
+  if [ ${DOWNSAMPLING} -gt 1 ]
+  then
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}) (${DISPERSED_SAMPLES} + (${DOWNSAMPLING} - (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}))) else (${DISPERSED_SAMPLES})" | bc -q`"
+  fi
+
   # Padding
   echo "Generating padding.conf file"
   echo "${DEVICE_NAME} ${DEVICE_PADDING}" >> ${CONFS}/padding.conf
@@ -49,26 +70,25 @@ tune() {
   echo "Generating zapped_channels.conf file"
   echo ${ZAPPED_CHANNELS} >> ${CONFS}/zapped_channels.conf
 
+  # RFI mitigation
+  # Time domain sigma cut
+  if [ "${RFIM_TDSC_STEPS}" != "" ]
+  then
+    for SIGMA in ${RFIM_TDSC_STEPS}
+    do
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -time_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/tdsc.conf
+      else
+        ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -time_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/tdsc.conf
+      fi
+    done
+  fi
+
   # Downsampling
   if [ ${DOWNSAMPLING} -gt 1 ]
   then
     echo "Tuning Downsampling"
-    if [ "${SUBBANDING}" = true ]
-    then
-      # Subbanding mode
-      SHIFT_ONE="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
-      SHIFT_TWO="`echo "(4148.808 * ((1.0 / ((${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})))) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
-      DISPERSED_SAMPLES="`echo "(${SAMPLES} + (${SHIFT_TWO} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP}))))" | bc -q`"
-      DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
-      DISPERSED_SAMPLES="`echo "${DISPERSED_SAMPLES} + (${SHIFT_ONE} * (${SUBBANDING_DM_FIRST} + ((${SUBBANDING_DMS} - 1) * ${SUBBANDING_DM_STEP})))" | bc -q`"
-      DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
-    else
-      # Standard mode
-      SHIFT="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPING_TIME})" | bc -ql`"
-      DISPERSED_SAMPLES="`echo "${SAMPLES} + (${SHIFT} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP})))" | bc -q`"
-      DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
-    fi
-    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}) (${DISPERSED_SAMPLES} + (${DOWNSAMPLING} - (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}))) else (${DISPERSED_SAMPLES})" | bc -q`"
     echo -n "${DEVICE_NAME} " >> ${CONFS}/downsampling.conf
     if [ "${SUBBANDING}" = true ]
     then
