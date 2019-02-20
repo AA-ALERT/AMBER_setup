@@ -34,6 +34,8 @@ testing() {
       if [ "`echo ${CONF} | awk -F' ' '{print $5}'`" == 1 ]
       then
         CONDITIONAL_REPLACEMENT="-conditional_replacement"
+      else
+        CONDITIONAL_REPLACEMENT=""
       fi
       echo -n "Testing TimeDomainSigmaCut (RFIm) for ${SIGMA} sigma: "
       if [ "${SUBBANDING}" = true ]
