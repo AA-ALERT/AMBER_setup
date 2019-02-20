@@ -30,7 +30,7 @@ testing() {
   then
     for SIGMA in ${RFIM_TDSC_STEPS}
     do
-      CONF="`cat ${CONFS}/downsampling.conf | grep ${DEVICE_NAME} | grep " ${DISPERSED_SAMPLES} " | grep " ${SIGMA} "`"
+      CONF="`cat ${CONFS}/tdsc.conf | grep ${DEVICE_NAME} | grep " ${DISPERSED_SAMPLES} " | grep " ${SIGMA} "`"
       if [ "`echo ${CONF} | awk -F' ' '{print $5}'`" == 1 ]
       then
         CONDITIONAL_REPLACEMENT="-conditional_replacement"
