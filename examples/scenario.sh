@@ -69,6 +69,8 @@ DM_STEP="0.0375"
 BEAMS="12"
 ## Number of synthesized output beams
 SYNTHESIZED_BEAMS="12"
+## Sigma cut steps for the time domain sigma cut RFI mitigation
+RFIM_TDSC_STEPS="3.0 3.5 4.0"
 ## Downsampling factors for pulse width test
 INTEGRATION_STEPS="5 10 50 100 250 500"
 ## Zapped channels
