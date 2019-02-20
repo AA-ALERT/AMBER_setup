@@ -8,7 +8,7 @@ tune() {
     FILES="padding.conf zapped_channels.conf integration_steps.conf integration.conf snr.conf"
     if [ "${RFIM_TDSC_STEPS}" != "" ]
     then
-      FILES="${FILES} tdsc.conf"
+      FILES="${FILES} tdsc_steps.conf tdsc.conf"
     fi
     if [ ${DOWNSAMPLING} -gt 1 ]
     then
