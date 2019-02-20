@@ -5,19 +5,30 @@ tune() {
 
   if [ -d ${CONFS} ]
   then
-    if [ "${SNR}" = "SNR" ]
+    FILES="padding.conf zapped_channels.conf integration_steps.conf integration.conf snr.conf"
+    if [ "${RFIM_TDSC_STEPS}" != "" ]
     then
-      FILES="padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf integration_steps.conf integration.conf snr.conf"
-    elif [ "${SNR}" = "MOMAD" ]
-    then
-      FILES="padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf integration_steps.conf integration.conf max.conf mom_stepone.conf mom_steptwo.conf momad.conf"
-    elif [ "${SNR}" = "MOMSIGMACUT" ]
-    then
-      FILES="padding.conf zapped_channels.conf dedispersion_stepone.conf dedispersion_steptwo.conf dedispersion.conf integration_steps.conf integration.conf max_std.conf mom_stepone.conf mom_steptwo.conf"
+      FILES="${FILES} tdsc.conf"
     fi
     if [ ${DOWNSAMPLING} -gt 1 ]
     then
       FILES="${FILES} downsampling.conf"
+    fi
+    if [ "${SUBBANDING}" = true ]
+    then
+      FILES="${FILES} dedispersion_stepone.conf dedispersion_steptwo.conf"
+    else
+      FILES="${FILES} dedispersion.conf"
+    fi
+    if [ "${SNR}" = "SNR" ]
+    then
+      FILES="${FILES} snr.conf"
+    elif [ "${SNR}" = "MOMAD" ]
+    then
+      FILES="${FILES} max.conf mom_stepone.conf mom_steptwo.conf momad.conf"
+    elif [ "${SNR}" = "MOMSIGMACUT" ]
+    then
+      FILES="${FILES} max_std.conf mom_stepone.conf mom_steptwo.conf"
     fi
     for file in ${FILES}
     do
