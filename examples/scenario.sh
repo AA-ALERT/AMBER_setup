@@ -3,6 +3,8 @@
 # Example tuning scenario
 
 # System
+## CPU core to pin the processes to
+CPU_CORE="1"
 ## OpenCL platform ID
 OPENCL_PLATFORM="0"
 ## OpenCL device ID
