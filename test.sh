@@ -3,32 +3,58 @@
 testing() {
   source ${SCENARIO}
 
+  # Compute the number of dispersed samples
+  if [ "${SUBBANDING}" = true ]
+  then
+    # Subbanding mode
+    SHIFT_ONE="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
+    SHIFT_TWO="`echo "(4148.808 * ((1.0 / ((${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})))) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
+    DISPERSED_SAMPLES="`echo "(${SAMPLES} + (${SHIFT_TWO} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP}))))" | bc -q`"
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
+    DISPERSED_SAMPLES="`echo "${DISPERSED_SAMPLES} + (${SHIFT_ONE} * (${SUBBANDING_DM_FIRST} + ((${SUBBANDING_DMS} - 1) * ${SUBBANDING_DM_STEP})))" | bc -q`"
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
+  else
+    # Standard mode
+    SHIFT="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPING_TIME})" | bc -ql`"
+    DISPERSED_SAMPLES="`echo "${SAMPLES} + (${SHIFT} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP})))" | bc -q`"
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
+  fi
+  if [ ${DOWNSAMPLING} -gt 1 ]
+  then
+    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}) (${DISPERSED_SAMPLES} + (${DOWNSAMPLING} - (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}))) else (${DISPERSED_SAMPLES})" | bc -q`"
+  fi
+
+  # RFI mitigation
+  # Time domain sigma cut
+  if [ "${RFIM_TDSC_STEPS}" != "" ]
+  then
+    for SIGMA in ${RFIM_TDSC_STEPS}
+    do
+      CONF="`cat ${CONFS}/downsampling.conf | grep ${DEVICE_NAME} | grep " ${DISPERSED_SAMPLES} " | grep " ${SIGMA} "`"
+      if [ "`echo ${CONF} | awk -F' ' '{print $5}'`" == 1 ]
+      then
+        CONDITIONAL_REPLACEMENT="-conditional_replacement"
+      fi
+      echo -n "Testing TimeDomainSigmaCut (RFIm) for ${SIGMA} sigma: "
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -time_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $9}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $13}'`" ${CONDITIONAL_REPLACEMENT}
+      else
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -time_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $9}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $13}'`" ${CONDITIONAL_REPLACEMENT}
+      fi
+    done
+  fi
+
   # Downsampling
   if [ ${DOWNSAMPLING} -gt 1 ]
   then
-    if [ "${SUBBANDING}" = true ]
-    then
-      # Subbanding mode
-      SHIFT_ONE="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
-      SHIFT_TWO="`echo "(4148.808 * ((1.0 / ((${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} / ${SUBBANDS} / 2.0) * ${CHANNEL_BANDWIDTH})))) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - (${CHANNELS} / ${SUBBANDS} / 2.0)) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPLING_TIME})" | bc -ql`"
-      DISPERSED_SAMPLES="`echo "(${SAMPLES} + (${SHIFT_TWO} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP}))))" | bc -q`"
-      DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
-      DISPERSED_SAMPLES="`echo "${DISPERSED_SAMPLES} + (${SHIFT_ONE} * (${SUBBANDING_DM_FIRST} + ((${SUBBANDING_DMS} - 1) * ${SUBBANDING_DM_STEP})))" | bc -q`"
-      DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
-    else
-      # Standard mode
-      SHIFT="`echo "(4148.808 * ((1.0 / (${MIN_FREQ} * ${MIN_FREQ})) - (1.0 / ((${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH})) * (${MIN_FREQ} + ((${CHANNELS} - 1) * ${CHANNEL_BANDWIDTH}))))) * (${SAMPLES})) / (${SAMPLES} * ${SAMPING_TIME})" | bc -ql`"
-      DISPERSED_SAMPLES="`echo "${SAMPLES} + (${SHIFT} * (${DM_FIRST} + ((${DMS} - 1) * ${DM_STEP})))" | bc -q`"
-      DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % 1) (${DISPERSED_SAMPLES} / 1 + 1) else (${DISPERSED_SAMPLES} / 1)" | bc -q`"
-    fi
-    DISPERSED_SAMPLES="`echo "if (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}) (${DISPERSED_SAMPLES} + (${DOWNSAMPLING} - (${DISPERSED_SAMPLES} % ${DOWNSAMPLING}))) else (${DISPERSED_SAMPLES})" | bc -q`"
     CONF="`cat ${CONFS}/downsampling.conf | grep ${DEVICE_NAME} | grep " ${DISPERSED_SAMPLES} "`"
     echo -n "Testing Downsampling: "
     if [ "${SUBBANDING}" = true ]
     then
-      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -subband -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $9}'`"  
+      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -subband -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $11}'`"  
     else
-      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $9}'`"  
+      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $11}'`"  
     fi
     SAMPLES="`echo "${SAMPLES} / ${DOWNSAMPLING}" | bc -q`"
   fi
@@ -137,11 +163,11 @@ testing() {
     then
       CONF="`cat ${CONFS}/integration.conf | grep ${DEVICE_NAME} | grep " ${STEP} "`"
       echo -n "Testing Integration for step ${STEP}: "
-      ${INSTALL_ROOT}/bin/IntegrationTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} | awk -F' ' '{print $9}'`"
+      ${INSTALL_ROOT}/bin/IntegrationTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} | awk -F' ' '{print $11}'`"
     else
       CONF="`cat ${CONFS}/integration.conf | grep ${DEVICE_NAME} | grep " ${STEP} "`"
       echo -n "Testing Integration for step ${STEP}: "
-      ${INSTALL_ROOT}/bin/IntegrationTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} | awk -F' ' '{print $9}'`"
+      ${INSTALL_ROOT}/bin/IntegrationTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} | awk -F' ' '{print $11}'`"
     fi
     # SNR after downsampling
     if [ "${SNR}" = "SNR" ]
