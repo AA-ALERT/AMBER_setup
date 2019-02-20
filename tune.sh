@@ -74,6 +74,8 @@ tune() {
   # Time domain sigma cut
   if [ "${RFIM_TDSC_STEPS}" != "" ]
   then
+    echo "Generating tdsc_steps.conf file"
+    echo ${RFIM_TDSC_STEPS} >> ${CONFS}/tdsc_steps.conf
     for SIGMA in ${RFIM_TDSC_STEPS}
     do
       echo "Tuning TimeDomainSigmaCut (RFIm) for ${SIGMA} sigma"
