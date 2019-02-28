@@ -40,9 +40,30 @@ testing() {
       echo -n "Testing TimeDomainSigmaCut (RFIm) for ${SIGMA} sigma: "
       if [ "${SUBBANDING}" = true ]
       then
-        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -time_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D0 "`echo ${CONF} | awk -F' ' '{print $9}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $13}'`" ${CONDITIONAL_REPLACEMENT}
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -time_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D0 "`echo ${CONF} | awk -F' ' '{print $9}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
       else
-        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -time_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D0 "`echo ${CONF} | awk -F' ' '{print $9}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $13}'`" ${CONDITIONAL_REPLACEMENT}
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -time_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D0 "`echo ${CONF} | awk -F' ' '{print $9}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
+      fi
+    done
+  fi
+  # Frequency domain sigma cut
+  if [ "${RFIM_FDSC_STEPS}" != "" ]
+  then
+    for SIGMA in ${RFIM_FDSC_STEPS}
+    do
+      CONF="`cat ${CONFS}/fdsc.conf | grep ${DEVICE_NAME} | grep " ${DISPERSED_SAMPLES} " | grep " ${SIGMA} "`"
+      if [ "`echo ${CONF} | awk -F' ' '{print $5}'`" == 1 ]
+      then
+        CONDITIONAL_REPLACEMENT="-conditional_replacement"
+      else
+        CONDITIONAL_REPLACEMENT=""
+      fi
+      echo -n "Testing FrequencyDomainSigmaCut (RFIm) for ${SIGMA} sigma: "
+      if [ "${SUBBANDING}" = true ]
+      then
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -frequency_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D1 "`echo ${CONF} | awk -F' ' '{print $10}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
+      else
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -frequency_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D1 "`echo ${CONF} | awk -F' ' '{print $10}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
       fi
     done
   fi
