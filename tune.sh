@@ -91,7 +91,7 @@ tune() {
   # Frequency domain sigma cut
   if [ "${RFIM_FDSC_STEPS}" != "" ]
   then
-    echo "Generating tdsc_steps.conf file"
+    echo "Generating fdsc_steps.conf file"
     echo ${RFIM_FDSC_STEPS} >> ${CONFS}/fdsc_steps.conf
     for SIGMA in ${RFIM_FDSC_STEPS}
     do
