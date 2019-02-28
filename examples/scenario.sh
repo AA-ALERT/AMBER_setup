@@ -72,7 +72,7 @@ BEAMS="12"
 ## Number of synthesized output beams
 SYNTHESIZED_BEAMS="12"
 ## Sigma cut steps for the time domain sigma cut RFI mitigation
-RFIM_TDSC_STEPS="3.00000 3.500000 4.000000"
+RFIM_TDSC_STEPS="3.0 3.5 4.0"
 ## Sigma cut steps for the frequency domain sigma cut RFI mitigation
 RFIM_FDSC_STEPS="2.5 4.5"
 ## Downsampling factors for pulse width test
