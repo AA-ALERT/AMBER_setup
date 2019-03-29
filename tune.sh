@@ -10,6 +10,10 @@ tune() {
     then
       FILES="${FILES} tdsc_steps.conf tdsc.conf"
     fi
+    if [ "${RFIM_FDSC_STEPS}" != "" ]
+    then
+       FILES="${FILES} fdsc_steps.conf fdsc.conf"
+    fi
     if [ ${DOWNSAMPLING} -gt 1 ]
     then
       FILES="${FILES} downsampling.conf"
@@ -99,9 +103,9 @@ tune() {
       echo -n "${DEVICE_NAME} " >> ${CONFS}/fdsc.conf
       if [ "${SUBBANDING}" = true ]
       then
-        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
+        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
       else
-        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
+        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
       fi
     done
   fi
@@ -221,7 +225,7 @@ tune() {
       taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/IntegrationTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -integration ${STEP} -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/integration.conf
     fi
     # SNR after downsampling
-    if [ "${SNR}" = "SNR" ] 
+    if [ "${SNR}" = "SNR" ]
     then
       # Standard SNR
       echo "Tuning SNR for ${STEP_SAMPLES} samples"

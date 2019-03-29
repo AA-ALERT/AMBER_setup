@@ -61,9 +61,9 @@ testing() {
       echo -n "Testing FrequencyDomainSigmaCut (RFIm) for ${SIGMA} sigma: "
       if [ "${SUBBANDING}" = true ]
       then
-        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -frequency_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D1 "`echo ${CONF} | awk -F' ' '{print $10}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -frequency_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D1 "`echo ${CONF} | awk -F' ' '{print $10}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
       else
-        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -frequency_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D1 "`echo ${CONF} | awk -F' ' '{print $10}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
+        ${INSTALL_ROOT}/bin/RFImTesting -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -frequency_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -threads_D0 "`echo ${CONF} | awk -F' ' '{print $6}'`" -items_D1 "`echo ${CONF} | awk -F' ' '{print $10}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $12}'`" ${CONDITIONAL_REPLACEMENT}
       fi
     done
   fi
@@ -75,9 +75,9 @@ testing() {
     echo -n "Testing Downsampling: "
     if [ "${SUBBANDING}" = true ]
     then
-      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -subband -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $11}'`"  
+      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -subband -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $11}'`"
     else
-      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $11}'`"  
+      ${INSTALL_ROOT}/bin/IntegrationTesting -in_place -before_dedispersion -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -integration ${DOWNSAMPLING} -beams ${BEAMS} -samples ${DISPERSED_SAMPLES} -channels ${CHANNELS} -random -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`" -int_type "`echo ${CONF} |  awk -F' ' '{print $11}'`"
     fi
     SAMPLES="`echo "${SAMPLES} / ${DOWNSAMPLING}" | bc -q`"
   fi

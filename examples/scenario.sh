@@ -75,6 +75,8 @@ SYNTHESIZED_BEAMS="12"
 RFIM_TDSC_STEPS="3.00 3.50 4.00"
 ## Sigma cut steps for the frequency domain sigma cut RFI mitigation
 RFIM_FDSC_STEPS="2.50 4.50"
+## Number of bins for the bandpass correction in the frequency domain sigma cut
+RFIM_FDSC_BINS="32"
 ## Downsampling factors for pulse width test
 INTEGRATION_STEPS="5 10 50 100 250 500"
 ## Zapped channels
