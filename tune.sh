@@ -12,7 +12,7 @@ tune() {
     fi
     if [ "${RFIM_FDSC_STEPS}" != "" ]
     then
-       FILES="${FILES} fdsc_steps.conf fdsc.conf"
+      FILES="${FILES} fdsc_steps.conf fdsc.conf"
     fi
     if [ ${DOWNSAMPLING} -gt 1 ]
     then
