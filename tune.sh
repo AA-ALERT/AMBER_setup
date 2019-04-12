@@ -82,13 +82,16 @@ tune() {
     echo ${RFIM_TDSC_STEPS} >> ${CONFS}/tdsc_steps.conf
     for SIGMA in ${RFIM_TDSC_STEPS}
     do
-      echo "Tuning TimeDomainSigmaCut (RFIm) for ${SIGMA} sigma"
-      echo -n "${DEVICE_NAME} " >> ${CONFS}/tdsc.conf
-      if [ "${SUBBANDING}" = true ]
+      if [ "`grep "${DEVICE_NAME} ${DISPERSED_SAMPLES} ${SIGMA}" ${CONFS}/tdsc.conf`" == "" ]
       then
-        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -time_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/tdsc.conf
-      else
-        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -time_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/tdsc.conf
+        echo "Tuning TimeDomainSigmaCut (RFIm) for ${SIGMA} sigma"
+        echo -n "${DEVICE_NAME} " >> ${CONFS}/tdsc.conf
+        if [ "${SUBBANDING}" = true ]
+        then
+          taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -time_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/tdsc.conf
+        else
+          taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -time_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/tdsc.conf
+        fi
       fi
     done
   fi
@@ -99,13 +102,16 @@ tune() {
     echo ${RFIM_FDSC_STEPS} >> ${CONFS}/fdsc_steps.conf
     for SIGMA in ${RFIM_FDSC_STEPS}
     do
-      echo "Tuning FrequencyDomainSigmaCut (RFIm) for ${SIGMA} sigma"
-      echo -n "${DEVICE_NAME} " >> ${CONFS}/fdsc.conf
-      if [ "${SUBBANDING}" = true ]
+      if [ "`grep "${DEVICE_NAME} ${DISPERSED_SAMPLES} ${SIGMA}" ${CONFS}/fdsc.conf`" == "" ]
       then
-        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
-      else
-        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
+        echo "Tuning FrequencyDomainSigmaCut (RFIm) for ${SIGMA} sigma"
+        echo -n "${DEVICE_NAME} " >> ${CONFS}/fdsc.conf
+        if [ "${SUBBANDING}" = true ]
+        then
+          taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -subbanding -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
+        else
+          taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/RFImTuning -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -frequency_domain_sigma_cut -frequency_time -replace_mean -beams ${BEAMS} -channels ${CHANNELS} -samples ${DISPERSED_SAMPLES} -nr_bins ${RFIM_FDSC_BINS} -sigma ${SIGMA} -best 2>/dev/null 1>> ${CONFS}/fdsc.conf
+        fi
       fi
     done
   fi
