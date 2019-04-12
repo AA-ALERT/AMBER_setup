@@ -80,6 +80,7 @@ tune() {
   then
     echo "Generating tdsc_steps.conf file"
     echo ${RFIM_TDSC_STEPS} >> ${CONFS}/tdsc_steps.conf
+    touch ${CONFS}/tdsc.conf
     for SIGMA in ${RFIM_TDSC_STEPS}
     do
       if [ "`grep "${DEVICE_NAME} ${DISPERSED_SAMPLES} ${SIGMA}" ${CONFS}/tdsc.conf`" == "" ]
@@ -100,6 +101,7 @@ tune() {
   then
     echo "Generating fdsc_steps.conf file"
     echo ${RFIM_FDSC_STEPS} >> ${CONFS}/fdsc_steps.conf
+    touch ${CONFS}/fdsc.conf
     for SIGMA in ${RFIM_FDSC_STEPS}
     do
       if [ "`grep "${DEVICE_NAME} ${DISPERSED_SAMPLES} ${SIGMA}" ${CONFS}/fdsc.conf`" == "" ]
