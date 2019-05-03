@@ -39,7 +39,7 @@ MAX_ITEMS_DIM1="32"
 # Scenario
 ## Switch to select the subbanding mode; dedispersion specific
 SUBBANDING=true
-## Switch to select the SNR Mode ["SNR", "MOMAD", "MOMSIGMACUT"]
+## Switch to select the SNR Mode ["SNR", "SNR_SC", "MOMAD", "MOMSIGMACUT"]
 SNR="SNR"
 ## Number of channels
 CHANNELS="1536"
@@ -85,3 +85,5 @@ ZAPPED_CHANNELS=""
 MEDIAN_STEP=5
 ## Sigma cut value for MOMSIGMACUT mode; this value is currently harcoded in AMBER
 NSIGMA=3
+## Sigma cut for the SNR computation in SNR_SC mode
+SNR_SIGMA=3.00

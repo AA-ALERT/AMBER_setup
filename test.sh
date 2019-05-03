@@ -124,6 +124,17 @@ testing() {
     else
       ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
     fi
+  elif [ "${SNR}" = "SNR_SC" ]
+  then
+    # SNR with Sigma Cut
+    CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${SAMPLES} "`"
+    echo -n "Testing SNR_SC for ${SAMPLES} samples: "
+    if [ "${SUBBANDING}" = true ]
+    then
+      ${INSTALL_ROOT}/bin/SNRTesting -snr_sc -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -nsigma ${SNR_SIGMA} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    else
+      ${INSTALL_ROOT}/bin/SNRTesting -snr_sc -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -nsigma ${SNR_SIGMA} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+    fi
   elif [ "${SNR}" = "MOMAD" ]
   then
     # MOMAD specific
@@ -199,12 +210,25 @@ testing() {
       if [ "${SUBBANDING}" = true ]
       then
         CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
-        echo -n "Testing SNR for ${STEP_SAMPLES} samples: "
+        echo -n "Testing SNR_SC for ${STEP_SAMPLES} samples: "
         ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       else
         CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
-        echo -n "Testing SNR for `echo "${SAMPLES} / ${STEP}" | bc -q` samples: "
+        echo -n "Testing SNR_SC for `echo "${SAMPLES} / ${STEP}" | bc -q` samples: "
         ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      fi
+    elif [ "${SNR}" = "SNR_SC" ]
+    then
+      # SNR with Sigma Cut
+      if [ "${SUBBANDING}" = true ]
+      then
+        CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
+        echo -n "Testing SNR_SC for ${STEP_SAMPLES} samples: "
+        ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -nsigma ${SNR_SIGMA} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
+      else
+        CONF="`cat ${CONFS}/snr.conf | grep ${DEVICE_NAME} | grep " ${STEP_SAMPLES} "`"
+        echo -n "Testing SNR_SC for `echo "${SAMPLES} / ${STEP}" | bc -q` samples: "
+        ${INSTALL_ROOT}/bin/SNRTesting -snr -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -nsigma ${SNR_SIGMA} -threadsD0 "`echo ${CONF} | awk -F' ' '{print $5}'`" -itemsD0 "`echo ${CONF} | awk -F' ' '{print $8}'`"
       fi
     elif [ "${SNR}" = "MOMAD" ]
     then

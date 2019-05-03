@@ -5,7 +5,7 @@ tune() {
 
   if [ -d ${CONFS} ]
   then
-    FILES="padding.conf zapped_channels.conf integration_steps.conf integration.conf snr.conf"
+    FILES="padding.conf zapped_channels.conf integration_steps.conf integration.conf"
     if [ "${RFIM_TDSC_STEPS}" != "" ]
     then
       FILES="${FILES} tdsc_steps.conf tdsc.conf"
@@ -25,6 +25,9 @@ tune() {
       FILES="${FILES} dedispersion.conf"
     fi
     if [ "${SNR}" = "SNR" ]
+    then
+      FILES="${FILES} snr.conf"
+    elif [ "${SNR}" = "SNR_SC" ]
     then
       FILES="${FILES} snr.conf"
     elif [ "${SNR}" = "MOMAD" ]
@@ -161,6 +164,17 @@ tune() {
     else
       taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
     fi
+  elif [ "${SNR}" = "SNR_SC" ]
+  then
+    # SNR with Sigma Cut
+    echo "Tuning SNR_SC for ${SAMPLES} samples"
+    echo -n "${DEVICE_NAME} " >> ${CONFS}/snr.conf
+    if [ "${SUBBANDING}" = true ]
+    then
+      taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/SNRTuning -snr_sc -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -nsigma ${SNR_SIGMA} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+    else
+      taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/SNRTuning -snr_sc -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${SAMPLES} -dms ${DMS} -nsigma ${SNR_SIGMA} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+    fi
   elif [ "${SNR}" = "MOMAD" ]
   then
     # MOMAD specific
@@ -243,6 +257,17 @@ tune() {
         taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
       else
         taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/SNRTuning -snr -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+      fi
+    elif [ "${SNR}" = "SNR_SC" ]
+    then
+      # SNR with Sigma Cut
+      echo "Tuning SNR_SC for ${STEP_SAMPLES} samples"
+      echo -n "${DEVICE_NAME} " >> ${CONFS}/snr.conf
+      if [ "${SUBBANDING}" = true ]
+      then
+        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/SNRTuning -snr_sc -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -subband -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -subbanding_dms ${SUBBANDING_DMS} -dms ${DMS} -nsigma ${SNR_SIGMA} -best 2>/dev/null 1>> ${CONFS}/snr.conf
+      else
+        taskset -c ${CPU_CORE} ${INSTALL_ROOT}/bin/SNRTuning -snr_sc -iterations ${ITERATIONS} -opencl_platform ${OPENCL_PLATFORM} -opencl_device ${OPENCL_DEVICE} -padding ${DEVICE_PADDING} -vector ${DEVICE_THREADS} -min_threads ${MIN_THREADS} -max_threads ${MAX_THREADS} -max_items ${MAX_ITEMS} -dms_samples -beams ${SYNTHESIZED_BEAMS} -samples ${STEP_SAMPLES} -dms ${DMS} -nsigma ${SNR_SIGMA} -best 2>/dev/null 1>> ${CONFS}/snr.conf
       fi
     elif [ "${SNR}" = "MOMAD" ]
     then
