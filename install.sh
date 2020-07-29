@@ -3,57 +3,81 @@
 install() {
   echo "Installing github.com/isazi/utils"
   cd "${SOURCE_ROOT}"
-  git clone https://github.com/isazi/utils.git
+  git clone -b ${BRANCH} -q https://github.com/isazi/utils.git
   cd utils
-  git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
   echo "Installing github.com/isazi/OpenCL"
   cd "${SOURCE_ROOT}"
-  git clone https://github.com/isazi/OpenCL.git
+  git clone -b ${BRANCH} -q https://github.com/isazi/OpenCL.git
   cd OpenCL
-  git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
   echo "Installing github.com/AA-ALERT/AstroData"
   cd "${SOURCE_ROOT}"
-  git clone https://github.com/AA-ALERT/AstroData.git
+  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/AstroData.git
   cd AstroData
-  git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
   echo "Installing github.com/AA-ALERT/Dedispersion"
   cd "${SOURCE_ROOT}"
-  git clone https://github.com/AA-ALERT/Dedispersion.git
+  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/Dedispersion.git
   cd Dedispersion
-  git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
   echo "Installing github.com/AA-ALERT/Integration"
   cd "${SOURCE_ROOT}"
-  git clone https://github.com/AA-ALERT/Integration.git
+  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/Integration.git
   cd Integration
-  git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
   echo "Installing github.com/AA-ALERT/SNR"
   cd "${SOURCE_ROOT}"
-  git clone https://github.com/AA-ALERT/SNR.git
+  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/SNR.git
   cd SNR
-  git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
+  ${MAKE} install
+  echo
+
+  echo "Installing github.com/AA-ALERT/RFIm"
+  cd "${SOURCE_ROOT}"
+  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/RFIm.git
+  cd RFIm
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 
   echo "Installing github.com/AA-ALERT/AMBER"
   cd "${SOURCE_ROOT}"
-  git clone https://github.com/AA-ALERT/AMBER.git
+  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/AMBER.git
   cd AMBER
-  git checkout ${BRANCH}
+  mkdir build
+  cd build
+  cmake ${CMAKE_BUILD_ARGUMENTS} ..
   ${MAKE} install
   echo
 }

@@ -1,18 +1,33 @@
 #!/bin/bash
 
-MAKE="make"
+MAKE="make -j"
 
+# Check that the necessary environmental variables are set
 if [ -z "${SOURCE_ROOT}" ]
 then
   echo "Please set SOURCE_ROOT first; SOURCE_ROOT is the directory where source code will be kept."
   exit 1
 fi
-
 if [ -z "${INSTALL_ROOT}" ]
 then
   echo "Please set INSTALL_ROOT first; INSTALL_ROOT is the directory where the software will be installed."
   exit 1
 fi
+
+# Set CMake build arguments
+CMAKE_BUILD_ARGUMENTS="-DCMAKE_INSTALL_PREFIX=${INSTALL_ROOT}"
+if [ -z "${DEBUG}" ]
+then
+  CMAKE_BUILD_ARGUMENTS="${CMAKE_BUILD_ARGUMENTS} -DCMAKE_BUILD_TYPE=Release"
+else
+  CMAKE_BUILD_ARGUMENTS="${CMAKE_BUILD_ARGUMENTS} -DCMAKE_BUILD_TYPE=Debug"
+fi
+
+# Set AMBER include and library path
+OLD_CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}
+export CPLUS_INCLUDE_PATH="${INSTALL_ROOT}/include:${CPLUS_INCLUDE_PATH}"
+OLD_LIBRARY_PATH=${LIBRARY_PATH}
+export LIBRARY_PATH="${INSTALL_ROOT}/lib64:${LIBRARY_PATH}"
 
 # Save script directory
 DIR=`realpath ${0}`
@@ -103,5 +118,9 @@ else
     exit 1
   fi
 fi
+
+# Restore variables that were exported outside the scope of this script
+export CPLUS_INCLUDE_PATH=${OLD_CPLUS_INCLUDE_PATH}
+export LIBRARY_PATH=${OLD_LIBRARY_PATH}
 
 exit 0

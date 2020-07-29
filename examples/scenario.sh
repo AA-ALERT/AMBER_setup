@@ -3,6 +3,8 @@
 # Example tuning scenario
 
 # System
+## CPU core to pin the processes to
+CPU_CORE="1"
 ## OpenCL platform ID
 OPENCL_PLATFORM="0"
 ## OpenCL device ID
@@ -33,10 +35,12 @@ MAX_DIM1="128"
 MAX_ITEMS_DIM0="64"
 ## Maximum number of variables in OpenCL dimension 1; dedispersion specific
 MAX_ITEMS_DIM1="32"
-## Switch to use the subbanding mode; dedispersion specific
-SUBBANDING=true
 
 # Scenario
+## Switch to select the subbanding mode; dedispersion specific
+SUBBANDING=true
+## Switch to select the SNR Mode ["SNR", "SNR_SC", "MOMAD", "MOMSIGMACUT"]
+SNR="SNR"
 ## Number of channels
 CHANNELS="1536"
 ## Frequency of the lowest channel, in MHz
@@ -46,7 +50,9 @@ CHANNEL_BANDWIDTH="0.1953125"
 ## Number of samples per batch
 SAMPLES="25000"
 ## Sampling time
-SAMPLING_TIME="4.096e-05"
+SAMPLING_TIME="0.00004096"
+## Downsampling factor
+DOWNSAMPLING=1
 ## Number of subbands
 SUBBANDS="32"
 ## Number of DMs to dedisperse in step one; subbanding mode only
@@ -65,7 +71,19 @@ DM_STEP="0.0375"
 BEAMS="12"
 ## Number of synthesized output beams
 SYNTHESIZED_BEAMS="12"
-## Downsampling factors
+## Sigma cut steps for the time domain sigma cut RFI mitigation
+RFIM_TDSC_STEPS="3.00 3.50 4.00"
+## Sigma cut steps for the frequency domain sigma cut RFI mitigation
+RFIM_FDSC_STEPS="2.50 4.50"
+## Number of bins for the bandpass correction in the frequency domain sigma cut
+RFIM_FDSC_BINS="32"
+## Downsampling factors for pulse width test
 INTEGRATION_STEPS="5 10 50 100 250 500"
 ## Zapped channels
 ZAPPED_CHANNELS=""
+## Median of medians step size; only for MOMAD and MOMSIGMACUT mode
+MEDIAN_STEP=5
+## Sigma cut value for MOMSIGMACUT mode; this value is currently harcoded in AMBER
+NSIGMA=3
+## Sigma cut for the SNR computation in SNR_SC mode
+SNR_SIGMA=3.00
