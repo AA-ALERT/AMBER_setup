@@ -74,7 +74,7 @@ else
   COMMAND=${1}
   if [ ${COMMAND} = "install" ]
   then
-    if [ -n ${2} ]
+    if [ -n "${2}" ]
     then
       BRANCH=${2}
     else
@@ -83,7 +83,7 @@ else
     install
   elif [ ${COMMAND} = "update" ]
   then
-    if [ -n ${2} ]
+    if [ -n "${2}" ]
     then
       BRANCH=${2}
     else
