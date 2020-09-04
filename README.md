@@ -28,9 +28,9 @@ export INSTALL_ROOT=${HOME}/src/AMBER/build
 If the directories do not exist, they will be created by the script.
 
 In order to compile and run, AMBER needs a working [OpenCL](https://www.khronos.org/opencl/) environment; OpenCL is a necessary dependency for the pipeline.
+It is also necessary to have the [Google Test](https://github.com/google/googletest) framework installed and available.
 
 If the environmental variable `DEBUG` is set, generated executables and libraries will have compiler optimizations disabled, and contain all debug symbols.
-If the environmental variable `OPENMP` is set, [OpenMP](http://www.openmp.org/) is used to parallelize some of the CPU workload.
 ```bash
 # Example
 export DEBUG=1
