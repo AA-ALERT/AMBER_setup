@@ -1,11 +1,11 @@
 
-![AMBER](https://raw.githubusercontent.com/AA-ALERT/AMBER/master/doc/Amber-Logo-h200.png)
+![AMBER](https://raw.githubusercontent.com/TRASAL/AMBER/master/doc/Amber-Logo-h200.png)
 
 [![DOI](https://zenodo.org/badge/84329404.svg)](https://zenodo.org/badge/latestdoi/84329404)
 
 # AMBER Setup and Management Scripts
 
-This repository contains a set of scripts to perform basic maintenance operation on an installation of [AMBER](https://github.com/AA-ALERT/AMBER), a many-core accelerated and fully auto-tuned FRB pipeline.
+This repository contains a set of scripts to perform basic maintenance operation on an installation of [AMBER](https://github.com/TRASAL/AMBER), a many-core accelerated and fully auto-tuned FRB pipeline.
 The operations currently supported are:
 
 - **Download** and install the complete pipeline

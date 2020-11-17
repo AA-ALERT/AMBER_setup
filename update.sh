@@ -17,7 +17,7 @@ update() {
   git pull
   echo
 
-  echo "Updating github.com/AA-ALERT/AstroData"
+  echo "Updating github.com/TRASAL/AstroData"
   cd "${SOURCE_ROOT}"
   cd AstroData
   git stash
@@ -25,7 +25,7 @@ update() {
   git pull
   echo
 
-  echo "Updating github.com/AA-ALERT/Dedispersion"
+  echo "Updating github.com/TRASAL/Dedispersion"
   cd "${SOURCE_ROOT}"
   cd Dedispersion
   git stash
@@ -33,7 +33,7 @@ update() {
   git pull
   echo
 
-  echo "Updating github.com/AA-ALERT/Integration"
+  echo "Updating github.com/TRASAL/Integration"
   cd "${SOURCE_ROOT}"
   cd Integration
   git stash
@@ -41,7 +41,7 @@ update() {
   git pull
   echo
 
-  echo "Updating github.com/AA-ALERT/SNR"
+  echo "Updating github.com/TRASAL/SNR"
   cd "${SOURCE_ROOT}"
   cd SNR
   git stash
@@ -49,7 +49,7 @@ update() {
   git pull
   echo
 
-  echo "Updating github.com/AA-ALERT/RFIm"
+  echo "Updating github.com/TRASAL/RFIm"
   cd "${SOURCE_ROOT}"
   cd RFIm
   git stash
@@ -57,7 +57,7 @@ update() {
   git pull
   echo
 
-  echo "Updating github.com/AA-ALERT/AMBER"
+  echo "Updating github.com/TRASAL/AMBER"
   cd "${SOURCE_ROOT}"
   cd AMBER
   git stash

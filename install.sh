@@ -21,9 +21,9 @@ install() {
   ${MAKE} install
   echo
 
-  echo "Installing github.com/AA-ALERT/AstroData"
+  echo "Installing github.com/TRASAL/AstroData"
   cd "${SOURCE_ROOT}"
-  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/AstroData.git
+  git clone -b ${BRANCH} -q https://github.com/TRASAL/AstroData.git
   cd AstroData
   mkdir build
   cd build
@@ -31,9 +31,9 @@ install() {
   ${MAKE} install
   echo
 
-  echo "Installing github.com/AA-ALERT/Dedispersion"
+  echo "Installing github.com/TRASAL/Dedispersion"
   cd "${SOURCE_ROOT}"
-  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/Dedispersion.git
+  git clone -b ${BRANCH} -q https://github.com/TRASAL/Dedispersion.git
   cd Dedispersion
   mkdir build
   cd build
@@ -41,9 +41,9 @@ install() {
   ${MAKE} install
   echo
 
-  echo "Installing github.com/AA-ALERT/Integration"
+  echo "Installing github.com/TRASAL/Integration"
   cd "${SOURCE_ROOT}"
-  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/Integration.git
+  git clone -b ${BRANCH} -q https://github.com/TRASAL/Integration.git
   cd Integration
   mkdir build
   cd build
@@ -51,9 +51,9 @@ install() {
   ${MAKE} install
   echo
 
-  echo "Installing github.com/AA-ALERT/SNR"
+  echo "Installing github.com/TRASAL/SNR"
   cd "${SOURCE_ROOT}"
-  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/SNR.git
+  git clone -b ${BRANCH} -q https://github.com/TRASAL/SNR.git
   cd SNR
   mkdir build
   cd build
@@ -61,9 +61,9 @@ install() {
   ${MAKE} install
   echo
 
-  echo "Installing github.com/AA-ALERT/RFIm"
+  echo "Installing github.com/TRASAL/RFIm"
   cd "${SOURCE_ROOT}"
-  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/RFIm.git
+  git clone -b ${BRANCH} -q https://github.com/TRASAL/RFIm.git
   cd RFIm
   mkdir build
   cd build
@@ -71,9 +71,9 @@ install() {
   ${MAKE} install
   echo
 
-  echo "Installing github.com/AA-ALERT/AMBER"
+  echo "Installing github.com/TRASAL/AMBER"
   cd "${SOURCE_ROOT}"
-  git clone -b ${BRANCH} -q https://github.com/AA-ALERT/AMBER.git
+  git clone -b ${BRANCH} -q https://github.com/TRASAL/AMBER.git
   cd AMBER
   mkdir build
   cd build

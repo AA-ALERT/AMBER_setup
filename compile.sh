@@ -15,42 +15,42 @@ compile() {
   ${MAKE} install
   echo
 
-  echo "Compiling github.com/AA-ALERT/AstroData"
+  echo "Compiling github.com/TRASAL/AstroData"
   cd "${SOURCE_ROOT}"
   cd AstroData/build
   ${MAKE} clean
   ${MAKE} install
   echo
 
-  echo "Compiling github.com/AA-ALERT/Dedispersion"
+  echo "Compiling github.com/TRASAL/Dedispersion"
   cd "${SOURCE_ROOT}"
   cd Dedispersion/build
   ${MAKE} clean
   ${MAKE} install
   echo
 
-  echo "Compiling github.com/AA-ALERT/Integration"
+  echo "Compiling github.com/TRASAL/Integration"
   cd "${SOURCE_ROOT}"
   cd Integration/build
   ${MAKE} clean
   ${MAKE} install
   echo
 
-  echo "Compiling github.com/AA-ALERT/SNR"
+  echo "Compiling github.com/TRASAL/SNR"
   cd "${SOURCE_ROOT}"
   cd SNR/build
   ${MAKE} clean
   ${MAKE} install
   echo
 
-  echo "Compiling github.com/AA-ALERT/RFIm"
+  echo "Compiling github.com/TRASAL/RFIm"
   cd "${SOURCE_ROOT}"
   cd RFIm/build
   ${MAKE} clean
   ${MAKE} install
   echo
 
-  echo "Compiling github.com/AA-ALERT/AMBER"
+  echo "Compiling github.com/TRASAL/AMBER"
   cd "${SOURCE_ROOT}"
   cd AMBER/build
   ${MAKE} clean
